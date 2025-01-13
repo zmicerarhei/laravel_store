@@ -19,13 +19,13 @@ _The project was developed as part of an internship at the Innowise_.
 -   At first clone the repository:
 
 ```shell
-   git clone -b lara/create_catalog https://github.com/zmicerarhei/PHP-internship.git
+   git clone https://github.com/zmicerarhei/laravel_store.git
 ```
 
--   Go to the next directory:
+-   Go to the project directory:
 
 ```shell
-   cd PHP-internship/lara_catalog/
+   cd laravel_store
 ```
 
 -   Then create a .env file like .env.example and replace the variables for connecting to the database with the following:
@@ -43,13 +43,7 @@ _The project was developed as part of an internship at the Innowise_.
     docker compose up -d --build
 ```
 
--   Install the required dependencies:
-
-```shell
-   docker compose exec -it app composer install
-```
-
--   Make the necessary migrations and seeds:
+-   Apply the necessary migrations and seeds:
 
 ```shell
     docker compose exec -it app php artisan migrate
