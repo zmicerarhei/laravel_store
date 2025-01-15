@@ -28,49 +28,11 @@ _The project was developed as part of an internship at the Innowise_.
    cd laravel_store
 ```
 
--   Then create a .env file like .env.example and replace the variables for connecting to the database with the following:
-
-        DB_CONNECTION=mysql
-        DB_HOST=mysql
-        DB_PORT=3306
-        DB_DATABASE=laravel_db
-        DB_USERNAME=user
-        DB_PASSWORD=userpassword
-
--   Then run containers:
+-   Then use Makefile for project installing
+    (during the installation process, you may be asked to enter a password to configure access to the project directories.)
 
 ```shell
-    docker compose up -d --build
-```
-
--   Then install necessary dependencies:
-
-```shell
-    docker compose exec -u 1000 -it app composer install
-```
-
--   Generate application key:
-
-```shell
-    docker compose exec -u 1000 -it app php artisan key:generate
-```
-
--   Apply the necessary migrations and seeds:
-
-```shell
-    docker compose exec -u 1000 -it app php artisan migrate
-```
-
-```shell
-    docker compose exec -u 1000 -it app php artisan db:seed
-```
-
--   Set up access for the project directories:
-
-```shell
-    sudo chmod 755 -R ./
-    sudo chown -R www-data:www-data storage/
-    sudo chown -R www-data:www-data bootstrap/cache/
+   make
 ```
 
 # Usage
