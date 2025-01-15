@@ -7,7 +7,17 @@ DOCKER_COMPOSE := docker compose
 USER_ID := 1000
 
 # Default target
-all: run install generate-key migrate seed permissions
+all: create-env run install generate-key migrate seed permissions
+
+# Step 0: Create .env file from .env.example and set database connection
+create-env:
+	cp .env.example .env || echo ".env file already exists." && \
+	sed -i 's/^DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env && \
+	sed -i 's/^# DB_HOST=.*/DB_HOST=mysql/' .env && \
+	sed -i 's/^# DB_PORT=.*/DB_PORT=3306/' .env && \
+	sed -i 's/^# DB_DATABASE=.*/DB_DATABASE=laravel_db/' .env && \
+	sed -i 's/^# DB_USERNAME=.*/DB_USERNAME=user/' .env && \
+	sed -i 's/^# DB_PASSWORD=.*/DB_PASSWORD=userpassword/' .env 
 
 # Step 1: Run Docker containers
 run:
@@ -61,5 +71,4 @@ stop: ## stop all containers
 	@docker compose down
 
 restart: stop start ## restart all containers
-
 	
