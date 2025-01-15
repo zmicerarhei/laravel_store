@@ -43,20 +43,26 @@ _The project was developed as part of an internship at the Innowise_.
     docker compose up -d --build
 ```
 
--   Apply the necessary migrations and seeds:
+-   Then install necessary dependencies:
 
 ```shell
-    docker compose exec -it app php artisan migrate
-```
-
-```shell
-    docker compose exec -it app php artisan db:seed
+    docker compose exec -u 1000 -it app composer install
 ```
 
 -   Generate application key:
 
 ```shell
-    docker compose exec -it app php artisan key:generate
+    docker compose exec -u 1000 -it app php artisan key:generate
+```
+
+-   Apply the necessary migrations and seeds:
+
+```shell
+    docker compose exec -u 1000 -it app php artisan migrate
+```
+
+```shell
+    docker compose exec -u 1000 -it app php artisan db:seed
 ```
 
 -   Set up access for the project directories:
