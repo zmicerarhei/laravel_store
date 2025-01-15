@@ -37,7 +37,7 @@ _The project was developed as part of an internship at the Innowise_.
         DB_USERNAME=user
         DB_PASSWORD=userpassword
 
--   Then run containers with the required dependencies:
+-   Then run containers:
 
 ```shell
     docker compose up -d --build
