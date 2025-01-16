@@ -7,6 +7,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Class Service
+ *
+ * @property string $name
+ * @property string $description
+ * @property int $duration
+ * @property float $price
+ */
+
 class Service extends Model
 {
     protected $fillable = [

@@ -7,10 +7,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class ProductServices
+ *
+ * @property int $product_id
+ * @property int $service_id
+ */
 class ProductServices extends Model
 {
-    protected $table = 'product_services';
-
     protected $fillable = [
         'product_id',
         'service_id',
