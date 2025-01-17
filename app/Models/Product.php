@@ -45,6 +45,11 @@ class Product extends Model implements FilterableInterface
         return $this->belongsToMany(Service::class, 'product_services');
     }
 
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public function category(): belongsTo
     {
         return $this->belongsTo(Category::class);

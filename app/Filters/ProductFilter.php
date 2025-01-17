@@ -19,7 +19,7 @@ class ProductFilter extends Filter
      *
      * @param string $value
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     protected function manufacturer(string|array $value): Builder
     {

@@ -18,6 +18,7 @@ class ProductSeeder extends Seeder
                 'price' => 99.99,
                 'link' => '/images/product_1.jpg',
                 'category_id' => 1,
+                'brand_id' => 1,
             ],
             [
                 'name' => 'Смартфон Huawei P20',
@@ -27,6 +28,7 @@ class ProductSeeder extends Seeder
                 'price' => 85.50,
                 'link' => '/images/product_2.jpg',
                 'category_id' => 2,
+                'brand_id' => 1,
             ],
             [
                 'name' => 'Смартфон Samsung S15',
@@ -36,6 +38,7 @@ class ProductSeeder extends Seeder
                 'price' => 85.50,
                 'link' => '/images/product_2.jpg',
                 'category_id' => 2,
+                'brand_id' => 1,
             ],
             [
                 'name' => 'Смартфон Samsunmg S14',
@@ -45,6 +48,7 @@ class ProductSeeder extends Seeder
                 'price' => 85.50,
                 'link' => '/images/product_2.jpg',
                 'category_id' => 2,
+                'brand_id' => 1,
             ],
             [
                 'name' => 'Телевизор Sony 2214',
@@ -54,6 +58,7 @@ class ProductSeeder extends Seeder
                 'price' => 75.00,
                 'link' => '/images/product_3.jpg',
                 'category_id' => 1,
+                'brand_id' => 2,
             ],
             [
                 'name' => 'Ноутбук Apple Slim',
@@ -63,6 +68,7 @@ class ProductSeeder extends Seeder
                 'price' => 49.99,
                 'link' => '/images/product_4.jpg',
                 'category_id' => 3,
+                'brand_id' => 2,
             ],
             [
                 'name' => 'Планшет Samsung 1521',
@@ -72,6 +78,7 @@ class ProductSeeder extends Seeder
                 'price' => 299.99,
                 'link' => '/images/product_5.jpg',
                 'category_id' => 2,
+                'brand_id' => 2,
             ],
             [
                 'name' => 'Холодильник LG 225',
@@ -81,6 +88,7 @@ class ProductSeeder extends Seeder
                 'price' => 499.99,
                 'link' => '/images/product_6.jpg',
                 'category_id' => 1,
+                'brand_id' => 2,
             ],
             [
                 'name' => 'Пылесос Samsung 1882',
@@ -90,6 +98,7 @@ class ProductSeeder extends Seeder
                 'price' => 199.99,
                 'link' => '/images/product_7.jpg',
                 'category_id' => 1,
+                'brand_id' => 3,
             ],
             [
                 'name' => 'Микроволновая печь LG A8',
@@ -99,6 +108,7 @@ class ProductSeeder extends Seeder
                 'price' => 150.00,
                 'link' => '/images/product_8.jpg',
                 'category_id' => 1,
+                'brand_id' => 3,
             ],
             [
                 'name' => 'Стиральная машина LG 1132',
@@ -108,6 +118,7 @@ class ProductSeeder extends Seeder
                 'price' => 400.00,
                 'link' => '/images/product_9.jpg',
                 'category_id' => 1,
+                'brand_id' => 3,
             ],
             [
                 'name' => 'Ноутбук Sony 2618',
@@ -117,6 +128,7 @@ class ProductSeeder extends Seeder
                 'price' => 159.99,
                 'link' => '/images/product_10.jpg',
                 'category_id' => 3,
+                'brand_id' => 3,
             ],
             [
                 'name' => 'Игровая консоль Sony Playstation',
@@ -126,6 +138,7 @@ class ProductSeeder extends Seeder
                 'price' => 299.99,
                 'link' => '/images/product_1.jpg',
                 'category_id' => 2,
+                'brand_id' => 4,
             ],
             [
                 'name' => 'Телевизор Samsung 2000',
@@ -135,6 +148,7 @@ class ProductSeeder extends Seeder
                 'price' => 99.99,
                 'link' => '/images/product_2.jpg',
                 'category_id' => 1,
+                'brand_id' => 4,
             ],
             [
                 'name' => 'Ноутбук Samsung 2115',
@@ -144,6 +158,7 @@ class ProductSeeder extends Seeder
                 'price' => 159.99,
                 'link' => '/images/product_10.jpg',
                 'category_id' => 2,
+                'brand_id' => 4,
             ],
             [
                 'name' => 'Компьютер Apple i7',
@@ -153,6 +168,7 @@ class ProductSeeder extends Seeder
                 'price' => 159.99,
                 'link' => '/images/product_10.jpg',
                 'category_id' => 3,
+                'brand_id' => 4,
             ],
             [
                 'name' => 'Стиральная машина Sony 1253',
@@ -162,6 +178,7 @@ class ProductSeeder extends Seeder
                 'price' => 400.00,
                 'link' => '/images/product_9.jpg',
                 'category_id' => 1,
+                'brand_id' => 5,
             ],
             [
                 'name' => 'Игровая консоль Samsung 15',
@@ -171,6 +188,7 @@ class ProductSeeder extends Seeder
                 'price' => 299.99,
                 'link' => '/images/product_1.jpg',
                 'category_id' => 2,
+                'brand_id' => 5,
             ],
             [
                 'name' => 'Телевизор LG 18',
@@ -180,6 +198,7 @@ class ProductSeeder extends Seeder
                 'price' => 99.99,
                 'link' => '/images/product_2.jpg',
                 'category_id' => 1,
+                'brand_id' => 5,
             ],
             [
                 'name' => 'Ноутбук Apple New',
@@ -189,6 +208,7 @@ class ProductSeeder extends Seeder
                 'price' => 159.99,
                 'link' => '/images/product_10.jpg',
                 'category_id' => 3,
+                'brand_id' => 5,
             ]
         ];
 

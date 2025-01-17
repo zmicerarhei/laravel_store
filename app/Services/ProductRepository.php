@@ -7,40 +7,26 @@ namespace App\Services;
 use App\Filters\ProductFilter;
 use App\Models\Product;
 use App\Models\Category;
-use App\Services\Interfaces\ServiceInterface;
+use App\Services\Interfaces\RepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Builder;
 
-class ProductService implements ServiceInterface
+class ProductRepository implements RepositoryInterface
 {
-    protected $productFilter;
-
-    public function __construct(ProductFilter $productFilter)
-    {
-        $this->productFilter = $productFilter;
-    }
+    public function __construct(protected ProductFilter $productFilter) {}
 
     public function getProducts(int $perPage, ?string $orderBy, string $category_slug): array
     {
-        $query = Product::query();
-
-        if ($category_slug !== 'all-categories') {
-            $category = Category::where('slug', $category_slug)->firstOrFail();
-            $query->where('category_id', $category->id);
-        }
-
-        $baseQuery = clone $query;
-
+        $query = $this->buildProductQuery($category_slug);
+        $filters = $this->getUniqueFiltersCheckboxes($query, ['manufacturer']);
         $query->filter($this->productFilter);
         $this->applySorting($query, $orderBy);
 
-        $filters = $this->getUniqueFiltersCheckboxes($baseQuery, ['manufacturer']);
-        $total = $query->count();
         $products = $query->paginate($perPage);
+        // dd($products);
         return [
             'products' => $products,
-            'filters' => $filters,
-            'total' => $total
+            'filters' => $filters
         ];
     }
 
@@ -58,6 +44,18 @@ class ProductService implements ServiceInterface
     public function deleteProduct(Product $product): void
     {
         $product->delete();
+    }
+
+    protected function buildProductQuery(string $category_slug): Builder
+    {
+        $query = Product::query();
+
+        if ($category_slug !== 'all-categories') {
+            $category = Category::where('slug', $category_slug)->firstOrFail();
+            $query->where('category_id', $category->id);
+        }
+
+        return $query;
     }
 
     protected function getUniqueFiltersCheckboxes($query, $fields): array

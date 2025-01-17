@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\Interfaces\ServiceInterface;
-use App\Services\ProductService;
+use App\Services\ProductRepository;
 use Illuminate\Support\Facades\View;
 use App\Models\Category;
+use App\Services\Interfaces\RepositoryInterface;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 
@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ServiceInterface::class, ProductService::class);
+        $this->app->bind(RepositoryInterface::class, ProductRepository::class);
     }
 
     /**

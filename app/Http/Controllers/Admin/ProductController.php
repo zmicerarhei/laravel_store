@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
 use App\Models\Product;
-use App\Services\Interfaces\ServiceInterface;
+use App\Services\Interfaces\RepositoryInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -27,9 +27,9 @@ class ProductController extends Controller
         return view('admin.products.create_update', ['services' => $services, 'fields' => $fields]);
     }
 
-    public function store(ServiceInterface $productService, SaveProductRequest $request): RedirectResponse
+    public function store(RepositoryInterface $productRepository, SaveProductRequest $request): RedirectResponse
     {
-        $product = $productService->createProduct($request->only(
+        $product = $productRepository->createProduct($request->only(
             'name',
             'manufacturer',
             'link',
@@ -61,11 +61,11 @@ class ProductController extends Controller
     }
 
     public function update(
-        ServiceInterface $productService,
+        RepositoryInterface $productRepository,
         SaveProductRequest $request,
         Product $product
     ): RedirectResponse {
-        $productService->updateProduct($product, $request->only(
+        $productRepository->updateProduct($product, $request->only(
             'name',
             'manufacturer',
             'link',
@@ -77,9 +77,9 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен!');
     }
 
-    public function delete(ServiceInterface $productService, Product $product): RedirectResponse
+    public function delete(RepositoryInterface $productRepository, Product $product): RedirectResponse
     {
-        $productService->deleteProduct($product);
+        $productRepository->deleteProduct($product);
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален!');
     }
 }
