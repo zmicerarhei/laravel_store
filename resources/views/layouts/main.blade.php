@@ -39,8 +39,7 @@
                                             <ul>
                                                 @foreach ($categories as $category)
                                                     <li>
-                                                        <a
-                                                            href="{{ route('client.products.showProductsByCategory', $category->slug) }}">
+                                                        <a href="{{ route('client.products.index', $category->slug) }}">
                                                             {{ $category['title'] }}
                                                         </a>
                                                     </li>

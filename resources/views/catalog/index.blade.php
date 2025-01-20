@@ -69,8 +69,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <form method="GET"
-                                action="{{ route('client.products.showProductsByCategory', $category['slug'] ?? '') }}">
+                            <form method="GET" action="{{ route('client.products.index', $category['slug'] ?? '') }}">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
                                         <div class="card mb-3">
@@ -111,7 +110,7 @@
 
 @section('custom_js')
     <script>
-        window.categoryUrl = "{{ route('client.products.showProductsByCategory', $category['slug'] ?? '') }}";
+        window.categoryUrl = "{{ route('client.products.index', $category['slug'] ?? '') }}";
     </script>
     <script src="/js/sort.js"></script>
 @endsection

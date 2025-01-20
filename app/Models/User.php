@@ -6,9 +6,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 
@@ -52,8 +54,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         ];
     }
 
-    public function isAdmin(): bool
+    public static function checkAdminRole(): bool
     {
-        return $this->role === 'admin';
+        return Auth::check() && Auth::user()->role === UserRole::Admin->value;
+    }
+
+    public static function checkUserRole(): bool
+    {
+        return Auth::check() && Auth::user()->role === UserRole::User->value;
     }
 }

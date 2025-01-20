@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
 use App\Models\Product;
-use App\Services\Interfaces\RepositoryInterface;
+use App\Contracts\RepositoryInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 

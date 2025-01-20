@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property string $name
  * @property string $description
- * @property string $manufacturer
  * @property string $release_date
  * @property float $price
  * @property string $link
@@ -29,11 +28,11 @@ class Product extends Model implements FilterableInterface
     protected $fillable = [
         'name',
         'description',
-        'manufacturer',
         'release_date',
         'price',
         'link',
-        'category_id'
+        'category_id',
+        'brand_id'
     ];
 
     // This is a temporary solution to prevent the category not being present error when creating a product. In the future,

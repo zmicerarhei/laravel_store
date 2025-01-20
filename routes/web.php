@@ -41,8 +41,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('client.home.index');
-Route::get('/products', [CatalogController::class, 'index'])->name('client.products.index');
-Route::get('/products/{category}', [CatalogController::class, 'showProductsByCategory'])->name('client.products.showProductsByCategory');
+Route::get('/products/{category?}', [CatalogController::class, 'index'])->name('client.products.index');
 Route::get('/products/{category}/{product}', [CatalogController::class, 'showProduct'])->name('client.products.showProduct');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']], function () {
