@@ -45,7 +45,7 @@ Route::get('/products', [CatalogController::class, 'index'])->name('client.produ
 Route::get('/products/{category}', [CatalogController::class, 'showProductsByCategory'])->name('client.products.showProductsByCategory');
 Route::get('/products/{category}/{product}', [CatalogController::class, 'showProduct'])->name('client.products.showProduct');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']], function () {
     Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('admin.products.store');

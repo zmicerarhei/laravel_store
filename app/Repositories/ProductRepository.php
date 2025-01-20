@@ -2,32 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Repositories;
 
 use App\Filters\ProductFilter;
 use App\Models\Product;
 use App\Models\Category;
-use App\Services\Interfaces\RepositoryInterface;
+use App\Contracts\RepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Brand;
 
 class ProductRepository implements RepositoryInterface
 {
     public function __construct(protected ProductFilter $productFilter) {}
 
-    public function getProducts(int $perPage, ?string $orderBy, string $category_slug): array
+    public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
     {
         $query = $this->buildProductQuery($category_slug);
-        $filters = $this->getUniqueFiltersCheckboxes($query, ['manufacturer']);
+
         $query->filter($this->productFilter);
         $this->applySorting($query, $orderBy);
+        $products = $query->with('brand')->paginate($perPage);
 
-        $products = $query->paginate($perPage);
-        // dd($products);
-        return [
-            'products' => $products,
-            'filters' => $filters
-        ];
+        return $products;
     }
 
     public function createProduct(array $data): Product
@@ -56,17 +53,6 @@ class ProductRepository implements RepositoryInterface
         }
 
         return $query;
-    }
-
-    protected function getUniqueFiltersCheckboxes($query, $fields): array
-    {
-
-        $filtersCheckboxes = [];
-        foreach ($fields as $field) {
-            $cloneQuery = clone $query;
-            $filtersCheckboxes[$field] = $cloneQuery->select($field)->distinct()->pluck($field)->toArray();
-        }
-        return $filtersCheckboxes;
     }
 
     protected function applySorting($query, $orderBy): void

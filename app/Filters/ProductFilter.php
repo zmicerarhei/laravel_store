@@ -12,20 +12,23 @@ class ProductFilter extends Filter
      *
      * @var array<string>
      */
-    protected array $filters = ['manufacturer'];
+    protected array $filters = ['brand'];
 
     /**
      * Filter the query by a given attribute value.
      *
-     * @param string $value
+     * @param string|array $value
      *
      * @return Builder
      */
-    protected function manufacturer(string|array $value): Builder
+    protected function brand(string|array $value): Builder
     {
-        if (is_array($value)) {
-            return $this->builder->whereIn('manufacturer', $value);
-        }
-        return $this->builder->where('manufacturer', $value);
+        return $this->builder->whereHas('brand', function (Builder $query) use ($value) {
+            if (is_array($value)) {
+                $query->whereIn('name', $value);
+            } else {
+                $query->where('name', $value);
+            }
+        });
     }
 }

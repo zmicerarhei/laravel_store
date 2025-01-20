@@ -78,14 +78,14 @@
                                                 <h5>Бренд</h5>
                                             </div>
                                             <ul class="list-group list-group-flush">
-                                                @foreach ($filters['manufacturer'] as $filter)
+                                                @foreach ($brands as $brand)
                                                     <li class="list-group-item">
-                                                        <input id="{{ $filter }}" type="checkbox"
-                                                            class="form-check-input me-2" name="manufacturer[]"
-                                                            value="{{ $filter }}"
-                                                            {{ in_array($filter, request('manufacturer', [])) ? 'checked' : '' }}>
+                                                        <input id="{{ $brand }}" type="checkbox"
+                                                            class="form-check-input me-2" name="brand[]"
+                                                            value="{{ $brand }}"
+                                                            {{ in_array($brand, request('brand', [])) ? 'checked' : '' }}>
                                                         <label class="form-check-label"
-                                                            for="{{ $filter }}">{{ $filter }}</label>
+                                                            for="{{ $brand }}">{{ $brand }}</label>
                                                     </li>
                                                 @endforeach
                                             </ul>

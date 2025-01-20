@@ -36,6 +36,8 @@ class Product extends Model implements FilterableInterface
         'category_id'
     ];
 
+    // This is a temporary solution to prevent the category not being present error when creating a product. In the future,
+    // logic will be added to indicate which category a product belongs to when creating it.
     protected $attributes = [
         'category_id' => 1
     ];
