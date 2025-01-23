@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\Interfaces\ServiceInterface;
-use App\Services\ProductService;
-use Illuminate\Support\Facades\View;
-use App\Models\Category;
+use App\Repositories\ProductRepository;
+use App\Contracts\RepositoryInterface;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Number;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ServiceInterface::class, ProductService::class);
+        $this->app->bind(RepositoryInterface::class, ProductRepository::class);
     }
 
     /**
@@ -27,13 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (Schema::hasTable('categories')) {
-            $categories = Category::all();
-            View::share(
-                [
-                    'categories' => $categories
-                ]
-            );
+        if (!(session()->has('currency_iso'))) {
+            session()->put('currency_iso', config('currency.default.iso'));
+            session()->put('sale_rate', config('currency.default.sale_rate'));
         }
 
         Paginator::useBootstrapFour();

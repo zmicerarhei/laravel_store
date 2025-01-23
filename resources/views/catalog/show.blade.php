@@ -27,7 +27,7 @@
                 <div class="col-lg-6">
                     <div class="details_content">
                         <div class="details_name">{{ $product->name }}</div>
-                        <div class="details_brand">{{ $product->manufacturer }}</div>
+                        <div class="details_brand">{{ $product->brand->name }}</div>
                         <div>
                             <span class="details_price" data-base-price="{{ $product->price }}">{{ $product->price }}
                             </span>

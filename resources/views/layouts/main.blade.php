@@ -39,8 +39,7 @@
                                             <ul>
                                                 @foreach ($categories as $category)
                                                     <li>
-                                                        <a
-                                                            href="{{ route('client.products.showProductsByCategory', $category->slug) }}">
+                                                        <a href="{{ route('client.products.index', $category->slug) }}">
                                                             {{ $category['title'] }}
                                                         </a>
                                                     </li>
@@ -72,6 +71,25 @@
                                                 <span>(0)</span>
                                             </div>
                                         </a>
+                                    </div>
+                                    <div class="dropdown show d-inline-block">
+                                        <a class="btn btn-secondary dropdown-toggle btn-sm" href="#"
+                                            role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            {{ session('currency_iso', 'BYN') }}
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" href="{{ route('admin.currencies.udate') }}">
+                                                GET
+                                            </a>
+                                            @foreach ($currencies as $currency)
+                                                <a class="dropdown-item"
+                                                    href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
+                                                    {{ $currency->iso }}
+                                                </a>
+                                            @endforeach
+                                        </div>
                                     </div>
                                     <div class="search">
                                         <div class="search_icon">
