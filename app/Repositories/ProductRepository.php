@@ -18,11 +18,9 @@ class ProductRepository implements RepositoryInterface
     public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
     {
         $query = $this->buildProductQuery($category_slug);
-
         $query->filter($this->productFilter);
         $this->applySorting($query, $orderBy);
         $products = $query->with(['brand', 'category'])->paginate($perPage);
-
         return $products;
     }
 
