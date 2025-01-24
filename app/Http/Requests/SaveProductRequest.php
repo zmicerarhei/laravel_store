@@ -22,7 +22,7 @@ class SaveProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:100',
-            'manufacturer' => 'required|string|min:2|max:50',
+            'brand' => 'required|string|min:2|max:50',
             'link' => 'nullable|string',
             'description' => 'required|string|min:10',
             'release_date' => 'required|date',

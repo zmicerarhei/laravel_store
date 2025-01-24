@@ -31,7 +31,7 @@
                         <div>
                             <span class="details_price" data-base-price="{{ $product->price }}">{{ $product->price }}
                             </span>
-                            <span>BYN</span>
+                            <span>{{ session('currency_iso') }}</span>
                         </div>
                         <div class="details_date">Дата выпуска: {{ $product->release_date }}</div>
                         <div class="details_text">
@@ -46,7 +46,8 @@
                                         @if ($service->name === 'Гарантийное обслуживание') checked disabled @endif>
                                     <label for="service_{{ $service->id }}"><img src="/images/check.png"
                                             alt=""></label>
-                                    <span class="checkbox_title">{{ $service->name }}: {{ $service->price }} BYN</span>
+                                    <span class="checkbox_title">{{ $service->name }}: {{ $service->price }}
+                                        {{ session('currency_iso') }}</span>
                                 </div>
                             @endforeach
                         </div>

@@ -11,7 +11,7 @@ class ProductControllerTest extends TestCase
 {
     private array $testData = [
         'name' => 'New product',
-        'manufacturer' => 'Some manufaturer',
+        'brand' => 'Some brand',
         'link' => 'images/product_1.jpg',
         'description' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae, modi.',
         'release_date' => '2024-01-01',
@@ -74,7 +74,7 @@ class ProductControllerTest extends TestCase
         $this->assertDatabaseHas('products', [
             'id' => $existingProduct->id,
             'name' => $this->testData['name'],
-            'manufacturer' => $this->testData['manufacturer'],
+            'brand' => $this->testData['brand'],
             'link' => $this->testData['link'],
             'description' => $this->testData['description'],
             'release_date' => $this->testData['release_date'],

@@ -10,7 +10,7 @@
                     {{ $product->name }}
                 </a>
             </div>
-            <div class="product_manufacturer">{{ $product->brand->name }}</div>
+            <div class="product_brand">{{ $product->brand->name }}</div>
             <div class="product_price" data-base-price="{{ $product->price }}">
                 {{ $product->price }} {{ session('currency_iso') }}
             </div>

@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         $product = $productRepository->createProduct($request->only(
             'name',
-            'manufacturer',
+            'brand',
             'link',
             'description',
             'release_date',
@@ -67,7 +67,7 @@ class ProductController extends Controller
     ): RedirectResponse {
         $productRepository->updateProduct($product, $request->only(
             'name',
-            'manufacturer',
+            'brand',
             'link',
             'description',
             'release_date',

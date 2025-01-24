@@ -14,7 +14,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
-            'manufacturer' => $this->faker->company,
+            'brand' => $this->faker->company,
             'release_date' => $this->faker->date,
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'link' => $this->faker->imageUrl(640, 480, 'products')

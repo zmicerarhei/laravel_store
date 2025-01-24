@@ -21,6 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->command('app:fetch-exchange-rates')->everyTenMinutes();
+        $schedule->command('app:fetch-exchange-rates')->everyMinute();
     })
     ->create();

@@ -34,6 +34,14 @@ class CatalogController extends Controller
 
     public function showProduct(string $category, Product $product): View
     {
+
+        foreach ($product->services as $service) {
+            $service->price = $this->currencyService->convert($service->price);
+        }
+
+        $product->price = $this->currencyService->convert($product->price);
+
+
         return view('catalog.show', compact('product', 'category'));
     }
 
