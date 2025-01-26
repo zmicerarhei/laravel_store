@@ -35,7 +35,7 @@ seed:
 
 # Step 6: Set permissions
 permissions:
-	sudo chmod 755 -R ./ && \
+	sudo chmod 775 -R ./ && \
 	sudo chown -R www-data:www-data storage/ && \
 	sudo chown -R www-data:www-data bootstrap/cache/
 

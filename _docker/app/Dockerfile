@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
       docker-php-ext-install gd && \
       docker-php-ext-install zip && \
       docker-php-ext-install intl && \
+      docker-php-ext-install sockets && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -35,6 +36,16 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
     --install-dir=/usr/local/bin
+
+# Добавляем пользователя с UID 1000 и добавляем его в группу www-data
+RUN useradd -u 1000 -m -s /bin/bash user \
+    && usermod -a -G www-data user \
+    && mkdir -p /var/www \
+    && chown -R user:www-data /var/www \
+    && chmod -R 775 /var/www
+
+# Переключаемся на нового пользователя
+USER user
 
 # Устанавливаем рабочую директорию
 WORKDIR /var/www
