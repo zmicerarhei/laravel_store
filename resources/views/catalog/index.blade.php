@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col">
                     <div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
-                        <div class="results">Найдено <span>{{ $total }}</span> результатов</div>
+                        <div class="results">Найдено <span>{{ $products->total() }}</span> результатов</div>
                         <div class="sorting_container ml-md-auto">
                             <div class="sorting">
                                 <ul class="item_sorting">
@@ -69,8 +69,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <form method="GET"
-                                action="{{ route('client.products.showProductsByCategory', $category['slug'] ?? '') }}">
+                            <form method="GET" action="{{ route('client.products.index', $category['slug'] ?? '') }}">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
                                         <div class="card mb-3">
@@ -78,14 +77,14 @@
                                                 <h5>Бренд</h5>
                                             </div>
                                             <ul class="list-group list-group-flush">
-                                                @foreach ($filters['manufacturer'] as $filter)
+                                                @foreach ($brands as $brand)
                                                     <li class="list-group-item">
-                                                        <input id="{{ $filter }}" type="checkbox"
-                                                            class="form-check-input me-2" name="manufacturer[]"
-                                                            value="{{ $filter }}"
-                                                            {{ in_array($filter, request('manufacturer', [])) ? 'checked' : '' }}>
+                                                        <input id="{{ $brand }}" type="checkbox"
+                                                            class="form-check-input me-2" name="brand[]"
+                                                            value="{{ $brand }}"
+                                                            {{ in_array($brand, request('brand', [])) ? 'checked' : '' }}>
                                                         <label class="form-check-label"
-                                                            for="{{ $filter }}">{{ $filter }}</label>
+                                                            for="{{ $brand }}">{{ $brand }}</label>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -111,7 +110,7 @@
 
 @section('custom_js')
     <script>
-        window.categoryUrl = "{{ route('client.products.showProductsByCategory', $category['slug'] ?? '') }}";
+        window.categoryUrl = "{{ route('client.products.index', $category['slug'] ?? '') }}";
     </script>
     <script src="/js/sort.js"></script>
 @endsection

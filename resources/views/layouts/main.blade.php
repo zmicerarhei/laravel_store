@@ -27,7 +27,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                            <div class="header_content d-flex flex-row align-items-center justify-content-between">
                                 <div class="logo"><a href={{ route('client.home.index') }}>Innowise shop</a></div>
                                 <nav class="main_nav">
                                     <ul>
@@ -39,8 +39,7 @@
                                             <ul>
                                                 @foreach ($categories as $category)
                                                     <li>
-                                                        <a
-                                                            href="{{ route('client.products.showProductsByCategory', $category->slug) }}">
+                                                        <a href="{{ route('client.products.index', $category->slug) }}">
                                                             {{ $category['title'] }}
                                                         </a>
                                                     </li>
@@ -48,11 +47,10 @@
                                             </ul>
                                         </li>
                                         <li><a href="#">Аксессуары</a></li>
-                                        <li><a href="#">Предложения</a></li>
                                         <li><a href="#">Контакты</a></li>
                                     </ul>
                                 </nav>
-                                <div class="header_extra ml-auto">
+                                <div class="header_extra d-flex align-items-center">
                                     <div class="shopping_cart">
                                         <a href="cart.html">
                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -72,6 +70,22 @@
                                                 <span>(0)</span>
                                             </div>
                                         </a>
+                                    </div>
+                                    <div class="dropdown show">
+                                        <a class="btn btn-secondary dropdown-toggle btn-sm shadow-none" href="#"
+                                            role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            {{ session('currency_iso', 'BYN') }}
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            @foreach ($currencies as $currency)
+                                                <a class="shadow-none dropdown-item shadow-none"
+                                                    href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
+                                                    {{ $currency->iso }}
+                                                </a>
+                                            @endforeach
+                                        </div>
                                     </div>
                                     <div class="search">
                                         <div class="search_icon">

@@ -8,17 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
 use App\Models\Product;
-use App\Services\Interfaces\ServiceInterface;
+use App\Contracts\RepositoryInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
-    public function __construct(protected ServiceInterface $productService) {}
-
     public function index(): View
     {
-        $products = Product::all();
+        $products = Product::with(['brand', 'services'])->get();
         return view('admin.products.index', ['products' => $products]);
     }
 
@@ -29,11 +27,11 @@ class ProductController extends Controller
         return view('admin.products.create_update', ['services' => $services, 'fields' => $fields]);
     }
 
-    public function store(SaveProductRequest $request): RedirectResponse
+    public function store(RepositoryInterface $productRepository, SaveProductRequest $request): RedirectResponse
     {
-        $product = $this->productService->createProduct($request->only(
+        $product = $productRepository->createProduct($request->only(
             'name',
-            'manufacturer',
+            'brand',
             'link',
             'description',
             'release_date',
@@ -62,11 +60,14 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(SaveProductRequest $request, Product $product): RedirectResponse
-    {
-        $this->productService->updateProduct($product, $request->only(
+    public function update(
+        RepositoryInterface $productRepository,
+        SaveProductRequest $request,
+        Product $product
+    ): RedirectResponse {
+        $productRepository->updateProduct($product, $request->only(
             'name',
-            'manufacturer',
+            'brand',
             'link',
             'description',
             'release_date',
@@ -76,9 +77,9 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен!');
     }
 
-    public function delete(Product $product): RedirectResponse
+    public function delete(RepositoryInterface $productRepository, Product $product): RedirectResponse
     {
-        $this->productService->deleteProduct($product);
+        $productRepository->deleteProduct($product);
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален!');
     }
 }

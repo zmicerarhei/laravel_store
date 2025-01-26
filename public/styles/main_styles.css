@@ -137,6 +137,19 @@ section {
     box-sizing: border-box;
 }
 
+.dropdown-toggle {
+    box-shadow: none !important;
+}
+
+.dropdown-menu {
+    box-shadow: none !important;
+    min-width: unset !important;
+}
+
+.dropdown-item {
+    box-shadow: none !important;
+}
+
 .regular_checkbox {
     display: none;
 }
@@ -393,10 +406,6 @@ section {
     font-size: 24px;
 }
 
-.main_nav {
-    margin-left: 70px;
-}
-
 .main_nav>ul>li {
     display: inline-block;
     position: relative;
@@ -487,7 +496,9 @@ section {
     color: #1b1b1b;
 }
 
-.header_extra {}
+.header_extra {
+    column-gap: 20px;
+}
 
 .shopping_cart {
     display: inline-block;
@@ -531,7 +542,6 @@ section {
 
 .search {
     display: inline-block;
-    margin-left: 51px;
     cursor: pointer;
     vertical-align: sub;
     -webkit-transform: translateY(-1px);

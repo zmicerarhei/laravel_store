@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Interfaces;
+namespace App\Contracts;
 
 use App\Models\Product;
+use App\Filters\ProductFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface ServiceInterface
+interface RepositoryInterface
 {
 
     /**
      * Get all products.
      *
-     * @return LengthAwarePaginator<int, Product>
+     * @return array<int, mixed>
      */
-    public function getProducts(int $perPage, string $orderBy, string $category): array;
+    public function getProducts(int $perPage, string $orderBy, string $category): LengthAwarePaginator;
 
     /**
      * Create product.

@@ -18,7 +18,7 @@ class ProductTest extends TestCase
         $product = Product::create([
             'name' => 'Test Product',
             'description' => 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, cumque.',
-            'manufacturer' => 'Test Manufacturer',
+            'brand' => 'Test brand',
             'release_date' => '2024-01-01',
             'price' => 100.00,
             'link' => 'http://test.com'
@@ -33,7 +33,7 @@ class ProductTest extends TestCase
         $product = Product::create([
             'name' => 'Test Product',
             'description' => 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, cumque.',
-            'manufacturer' => 'Test Manufacturer',
+            'brand' => 'Test brand',
             'release_date' => '2024-01-01',
             'price' => 100.00,
             'link' => 'http://test.com'

@@ -29,7 +29,8 @@ _The project was developed as part of an internship at the Innowise_.
 ```
 
 -   Then use Makefile for project installing
-    (during the installation process, you may be asked to enter a password to configure access to the project directories.)
+    (You have to make sure, that you have Docker Compose v.2^ and make utility installed. Also during the installation process,
+    you may be asked to enter a password to configure access to the project directories.)
 
 ```shell
    make
@@ -38,4 +39,7 @@ _The project was developed as part of an internship at the Innowise_.
 # Usage
 
 -   To see the product catalog, go to http://localhost:8000/products
+
+(In order to check out admin functionality you have to register new account and set the role as a admin in DB for this user)
+
 -   To use the admin panel, go to http://localhost:8000/admin/products

@@ -6,39 +6,55 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Services\Interfaces\ServiceInterface;
+use App\Contracts\RepositoryInterface;
+use App\Services\CurrencyService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CatalogController extends Controller
 {
-    public function __construct(protected ServiceInterface $productService) {}
+    public function __construct(protected RepositoryInterface $productRepository, protected CurrencyService $currencyService) {}
 
-    public function index(Request $request): View|string
+    public function index(Request $request, $category_slug = 'all-categories'): View|string
     {
         $orderBy = $request->input('orderBy') ?? 'default';
-        ['products' => $products, 'filters' => $filters, 'total' => $total]
-            = $this->productService->getProducts(8, $orderBy, 'all-categories');
+        $products  = $this->productRepository->getProducts(8, $orderBy, $category_slug);
+        foreach ($products as $product) {
+            $product->price = $this->currencyService->convert($product->price);
+        };
         if ($request->ajax()) {
-            return view('partials.products', compact('products', 'filters', 'total'))->render();
+            return $this->ajaxResponse($products);
         }
-        return view('catalog.index', compact('products', 'filters', 'total'));
+
+        $category = $this->getCurrentCategory($category_slug);
+
+        return view('catalog.index', compact('products', 'category'));
     }
 
     public function showProduct(string $category, Product $product): View
     {
+
+        foreach ($product->services as $service) {
+            $service->price = $this->currencyService->convert($service->price);
+        }
+
+        $product->price = $this->currencyService->convert($product->price);
+
+
         return view('catalog.show', compact('product', 'category'));
     }
 
-    public function showProductsByCategory(Request $request, $category_slug): View|string
+    protected function getCurrentCategory($category_slug)
     {
-        $orderBy = $request->input('orderBy') ?? 'default';
-        $category = Category::where('slug', $category_slug)->firstOrFail();
-        ['products' => $products, 'filters' => $filters, 'total' => $total]
-            = $this->productService->getProducts(8, $orderBy, $category_slug);
-        if ($request->ajax()) {
-            return view('partials.products', compact('products', 'filters', 'total'))->render();
+        if ($category_slug !== 'all-categories') {
+            return Category::where('slug', $category_slug)->firstOrFail();
         }
-        return view('catalog.index', compact('products', 'filters', 'category', 'total'));
+        return null;
+    }
+
+    protected function ajaxResponse($products): string
+    {
+        return view('partials.products', compact('products'))->render();
     }
 }

@@ -3,10 +3,10 @@ $(document).ready(function () {
 
     $('.product_sorting_btn').click(function () {
         let orderBy = $(this).data('order');
-        $('.sorting_text').text($(this).find('span').text())
+        $('.sorting_text').text($(this).find('span').text());
         let queryParams = new URLSearchParams(window.location.search);
         let queryObject = Object.fromEntries(queryParams.entries());
-
+        console.log(window.categoryUrl);
         $.ajax({
             type: "GET",
             url: window.categoryUrl,

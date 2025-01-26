@@ -6,7 +6,7 @@ return [
             'label' => 'Название',
             'type' => 'text',
         ],
-        'manufacturer' => [
+        'brand' => [
             'label' => 'Производитель',
             'type' => 'text',
         ],
