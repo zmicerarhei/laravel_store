@@ -55,13 +55,9 @@ class RegisterController extends Controller
             $request->session()->regenerate();
             Log::info('Session regenerated', ['session' => $request->session()->all()]);
 
-            if (Auth::check()) {
-                /** @var User $user */
-                $user = Auth::user();
 
-                if ($user->role === 'admin') {
-                    return redirect()->intended('/admin/products');
-                }
+            if (Auth::check() && Auth::user()?->role === 'admin') {
+                return redirect()->intended('/admin/products');
             }
             return redirect()->intended('/');
         }

@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository implements RepositoryInterface
 {
-    public function __construct(protected ProductFilter $productFilter) {}
+    public function __construct(protected ProductFilter $productFilter)
+    {
+    }
 
     /**
      * Get products.
@@ -22,6 +24,9 @@ class ProductRepository implements RepositoryInterface
      */
     public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
     {
+        /**
+         * @var \Illuminate\Database\Eloquent\Builder<\App\Models\Product> $query
+         */
         $query = $this->buildProductQuery($category_slug);
         $query->filter($this->productFilter);
         $this->applySorting($query, $orderBy);

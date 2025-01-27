@@ -36,8 +36,6 @@ class Product extends Model implements FilterableInterface
         'brand_id'
     ];
 
-    // This is a temporary solution to prevent the category not being present error when creating a product. In the future,
-    // logic will be added to indicate which category a product belongs to when creating it.
     protected $attributes = [
         'category_id' => 1
     ];
@@ -47,11 +45,6 @@ class Product extends Model implements FilterableInterface
         return $this->belongsToMany(Service::class, 'product_services');
     }
 
-    /**
-     * Get the brand that owns the product.
-     *
-     * @return BelongsTo<Brand>
-     */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);

@@ -15,7 +15,9 @@ use Illuminate\Http\Request;
 
 class CatalogController extends Controller
 {
-    public function __construct(protected RepositoryInterface $productRepository, protected CurrencyServiceInterface $currencyService) {}
+    public function __construct(protected RepositoryInterface $productRepository, protected CurrencyServiceInterface $currencyService)
+    {
+    }
 
     public function index(Request $request, string $category_slug = 'all-categories'): View|string
     {

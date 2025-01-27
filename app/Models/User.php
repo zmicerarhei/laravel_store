@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -57,11 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public static function checkAdminRole(): bool
     {
-        return Auth::check() && Auth::user()->role === UserRole::Admin->value;
+        return Auth::check() && Auth::user()?->role === UserRole::Admin->value;
     }
 
     public static function checkUserRole(): bool
     {
-        return Auth::check() && Auth::user()->role === UserRole::User->value;
+        return Auth::check() && Auth::user()?->role === UserRole::User->value;
     }
 }
