@@ -15,6 +15,11 @@ class ProductRepository implements RepositoryInterface
 {
     public function __construct(protected ProductFilter $productFilter) {}
 
+    /**
+     * Get products.
+     *
+     *  @return LengthAwarePaginator<Product>
+     */
     public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
     {
         $query = $this->buildProductQuery($category_slug);
@@ -52,7 +57,7 @@ class ProductRepository implements RepositoryInterface
         return $query;
     }
 
-    protected function applySorting($query, $orderBy): void
+    protected function applySorting(Builder $query, ?string $orderBy): void
     {
         $orderByConfig = match ($orderBy) {
             'price-low-high' => ['price', 'asc'],

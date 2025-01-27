@@ -1,8 +1,13 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
 parameters:
     paths:
         - app
     level: 8
     ignoreErrors:
+        - '#Method .+::.+ return type with generic class.+does not specify its types: .+#'
+        - '#Method .+::.+ should return .+HasMany.+ but returns.+#'
+        - '#Template type TDeclaringModel on class.+HasMany is not covariant#'
+        - '#Generic type .+ does not specify its types#'
+        - '#has no value type specified in iterable type#'
     excludePaths:

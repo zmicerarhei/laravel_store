@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Services\CurrencyService;
+use App\Contracts\CurrencyServiceInterface;
 use Illuminate\Console\Command;
 
 class FetchExchangeRates extends Command
@@ -24,7 +26,7 @@ class FetchExchangeRates extends Command
     /**
      * Execute the console command.
      */
-    public function handle(CurrencyService $currencyService)
+    public function handle(CurrencyServiceInterface $currencyService): void
     {
         $currencyService->fetchExchangeRates();
         $this->info('Exchange rates updated successfully!');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -14,10 +16,15 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void
+    public function register(): void {}
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
     {
         View::composer(['catalog.index'], function ($view) {
-            $view->with('brands', Brand::all()->pluck('name'));
+            $view->with('brands', Brand::pluck('name')->all());
         });
 
         View::composer(['layouts.main'], function ($view) {
@@ -28,13 +35,5 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('categories', Category::all());
             $view->with('currencies', $currencies);
         });
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
     }
 }

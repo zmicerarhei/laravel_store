@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property float $price
  * @property string $link
  * @property int $category_id
+ * @property int $brand_id
  */
 
 class Product extends Model implements FilterableInterface
@@ -46,6 +47,11 @@ class Product extends Model implements FilterableInterface
         return $this->belongsToMany(Service::class, 'product_services');
     }
 
+    /**
+     * Get the brand that owns the product.
+     *
+     * @return BelongsTo<Brand>
+     */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
