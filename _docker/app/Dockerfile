@@ -4,6 +4,7 @@ FROM php:8.3-fpm
 RUN apt-get update && apt-get install -y \
       apt-utils \
       cron \
+      sudo \
       libpq-dev \
       libpng-dev \
       libzip-dev \
@@ -41,6 +42,9 @@ RUN useradd -u ${USER_ID} -m -s /bin/bash user \
     && mkdir -p /home/user/.composer \
     && chown -R user:user /home/user
 
+# Даем права sudo на запуск cron без пароля
+RUN echo "user ALL=(ALL) NOPASSWD: /etc/init.d/cron start" >> /etc/sudoers.d/user
+
 # Создаем необходимые директории Laravel
 RUN mkdir -p /var/www/storage/logs \
     /var/www/storage/framework/cache \
@@ -69,5 +73,5 @@ ENV PATH="${PATH}:/var/www/.composer/vendor/bin"
 # Устанавливаем рабочую директорию
 WORKDIR /var/www
 
-# Запускаем cron и php-fpm
-CMD service cron start && php-fpm
+# Запускаем cron через sudo и php-fpm
+CMD sudo /etc/init.d/cron start && php-fpm
