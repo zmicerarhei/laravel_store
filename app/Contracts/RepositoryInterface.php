@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace App\Contracts;
 
 use App\Models\Product;
-use App\Filters\ProductFilter;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface RepositoryInterface
 {
-
     /**
      * Get all products.
      *
-     * @return array<int, mixed>
+     *  @return LengthAwarePaginator<Product>
      */
     public function getProducts(int $perPage, string $orderBy, string $category): LengthAwarePaginator;
 

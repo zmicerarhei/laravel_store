@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -9,18 +11,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
-
-    public function create()
+    public function create(): View
     {
         return view('auth.register');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
 
         $request->validate([
@@ -35,12 +38,12 @@ class RegisterController extends Controller
         return redirect()->route('verification.notice');
     }
 
-    public function verifyEmail()
+    public function verifyEmail(): View
     {
         return view('auth.verify-email');
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -52,7 +55,8 @@ class RegisterController extends Controller
             $request->session()->regenerate();
             Log::info('Session regenerated', ['session' => $request->session()->all()]);
 
-            if (Auth::user()->role === 'admin') {
+
+            if (Auth::check() && Auth::user()?->role === 'admin') {
                 return redirect()->intended('/admin/products');
             }
             return redirect()->intended('/');
@@ -62,12 +66,12 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function login()
+    public function login(): View
     {
         return view('auth.login');
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
 
@@ -77,12 +81,12 @@ class RegisterController extends Controller
         return redirect()->route('login');
     }
 
-    public function forgotPassword()
+    public function forgotPassword(): View
     {
         return view('auth.forgot');
     }
 
-    public function sendResetLink(Request $request)
+    public function sendResetLink(Request $request): RedirectResponse
     {
         $request->validate(['email' => 'required|email']);
 
@@ -95,12 +99,12 @@ class RegisterController extends Controller
             : back()->withErrors(['error' => __($status)]);
     }
 
-    public function showResetForm(string $token)
+    public function showResetForm(string $token): View
     {
         return view('auth.reset-password', ['token' => $token]);
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request): RedirectResponse
     {
         $request->validate([
             'token' => 'required',

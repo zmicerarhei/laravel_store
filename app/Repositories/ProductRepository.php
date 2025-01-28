@@ -13,10 +13,20 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository implements RepositoryInterface
 {
-    public function __construct(protected ProductFilter $productFilter) {}
+    public function __construct(protected ProductFilter $productFilter)
+    {
+    }
 
+    /**
+     * Get products.
+     *
+     *  @return LengthAwarePaginator<Product>
+     */
     public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
     {
+        /**
+         * @var \Illuminate\Database\Eloquent\Builder<\App\Models\Product> $query
+         */
         $query = $this->buildProductQuery($category_slug);
         $query->filter($this->productFilter);
         $this->applySorting($query, $orderBy);
@@ -52,7 +62,7 @@ class ProductRepository implements RepositoryInterface
         return $query;
     }
 
-    protected function applySorting($query, $orderBy): void
+    protected function applySorting(Builder $query, ?string $orderBy): void
     {
         $orderByConfig = match ($orderBy) {
             'price-low-high' => ['price', 'asc'],

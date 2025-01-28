@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\Product;
 use Filterable\Filter;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -17,9 +18,9 @@ class ProductFilter extends Filter
     /**
      * Filter the query by a given attribute value.
      *
-     * @param string|array $value
+     * @param string|array<string> $value
      *
-     * @return Builder
+     * @return Builder<Product>
      */
     protected function brand(string|array $value): Builder
     {

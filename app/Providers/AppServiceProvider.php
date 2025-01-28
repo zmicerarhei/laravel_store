@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\CurrencyServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\ProductRepository;
 use App\Contracts\RepositoryInterface;
+use App\Services\DabrabytCurrencyService;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Number;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(RepositoryInterface::class, ProductRepository::class);
+        $this->app->bind(CurrencyServiceInterface::class, DabrabytCurrencyService::class);
     }
 
     /**

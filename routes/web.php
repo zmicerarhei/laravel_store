@@ -5,7 +5,6 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\CurrencyCotroller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;

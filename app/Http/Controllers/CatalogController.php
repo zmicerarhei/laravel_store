@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CurrencyServiceInterface;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Service;
 use App\Contracts\RepositoryInterface;
-use App\Services\CurrencyService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class CatalogController extends Controller
 {
-    public function __construct(protected RepositoryInterface $productRepository, protected CurrencyService $currencyService) {}
+    public function __construct(protected RepositoryInterface $productRepository, protected CurrencyServiceInterface $currencyService)
+    {
+    }
 
-    public function index(Request $request, $category_slug = 'all-categories'): View|string
+    public function index(Request $request, string $category_slug = 'all-categories'): View|string
     {
         $orderBy = $request->input('orderBy') ?? 'default';
         $products  = $this->productRepository->getProducts(8, $orderBy, $category_slug);
-        foreach ($products as $product) {
-            $product->price = $this->currencyService->convert($product->price);
+        foreach ($products->items() as $product) {
+            $product->price = $this->currencyService->convert((float)$product->price);
         };
         if ($request->ajax()) {
             return $this->ajaxResponse($products);
@@ -36,16 +39,17 @@ class CatalogController extends Controller
     {
 
         foreach ($product->services as $service) {
-            $service->price = $this->currencyService->convert($service->price);
+            /** @var Service $service */
+            $service->price = $this->currencyService->convert((float)$service->price);
         }
 
-        $product->price = $this->currencyService->convert($product->price);
+        $product->price = $this->currencyService->convert((float)$product->price);
 
 
         return view('catalog.show', compact('product', 'category'));
     }
 
-    protected function getCurrentCategory($category_slug)
+    protected function getCurrentCategory(string $category_slug): ?Category
     {
         if ($category_slug !== 'all-categories') {
             return Category::where('slug', $category_slug)->firstOrFail();
@@ -53,7 +57,11 @@ class CatalogController extends Controller
         return null;
     }
 
-    protected function ajaxResponse($products): string
+    /**
+     * @param LengthAwarePaginator<Product> $products
+     * @return string
+     */
+    protected function ajaxResponse(LengthAwarePaginator $products): string
     {
         return view('partials.products', compact('products'))->render();
     }
