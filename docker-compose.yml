@@ -15,8 +15,11 @@ services:
         build:
             context: .
             dockerfile: _docker/app/Dockerfile
+            args:
+                USER_ID: ${UID:-1000}
         volumes:
             - ./:/var/www
+            - composer_cache:/var/www/.composer
         container_name: project_app
 
     mysql:
@@ -57,3 +60,4 @@ services:
 
 volumes:
     mysql_data:
+    composer_cache:

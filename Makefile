@@ -2,12 +2,8 @@
 
 # Makefile for Laravel Catalog Project
 
-# Variables
-DOCKER_COMPOSE := docker compose
-USER_ID := 1000
-
 # Default target
-all: create-env run install generate-key migrate seed permissions
+all: create-env run install generate-key migrate seed
 
 # Step 0: Create .env file from .env.example and set database connection
 create-env:
@@ -15,33 +11,33 @@ create-env:
 
 # Step 1: Run Docker containers
 run:
-	$(DOCKER_COMPOSE) up -d --build
+	docker compose up -d --build
 
 # Step 2: Install dependencies
 install:
-	$(DOCKER_COMPOSE) exec -u $(USER_ID) -it app composer install
+	docker compose exec -it app composer install
 
 # Step 3: Generate application key
 generate-key:
-	$(DOCKER_COMPOSE) exec -u $(USER_ID) -it app php artisan key:generate
+	docker compose exec -it app php artisan key:generate
 
 # Step 4: Run migrations
 migrate:
-	$(DOCKER_COMPOSE) exec -u $(USER_ID) -it app php artisan migrate
+	docker compose exec -it app php artisan migrate
 
 # Step 5: Seed the database
 seed:
-	$(DOCKER_COMPOSE) exec -u $(USER_ID) -it app php artisan db:seed
+	docker compose exec -it app php artisan db:seed
 
 # Step 6: Set permissions
 permissions:
 	sudo chmod 775 -R ./ && \
-	sudo chown -R www-data:www-data storage/ && \
-	sudo chown -R www-data:www-data bootstrap/cache/
+	sudo chown -R user:www-data storage/ && \
+	sudo chown -R user:www-data bootstrap/cache/
 
 # Clean up - stop and remove containers
 clean:
-	$(DOCKER_COMPOSE) down
+	docker compose down
 
 
 # Usefull commands

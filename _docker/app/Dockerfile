@@ -32,22 +32,42 @@ RUN chmod 0644 /etc/cron.d/laravel_cron
 RUN crontab /etc/cron.d/laravel_cron
 
 # Установка Composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN curl -sS https://getcomposer.org/installer | php -- \
-    --filename=composer \
-    --install-dir=/usr/local/bin
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Добавляем пользователя с UID 1000 и добавляем его в группу www-data
-RUN useradd -u 1000 -m -s /bin/bash user \
+# Создаем пользователя и добавляем его в нужные группы
+ARG USER_ID=1000
+RUN useradd -u ${USER_ID} -m -s /bin/bash user \
     && usermod -a -G www-data user \
-    && mkdir -p /var/www \
-    && chown -R user:www-data /var/www \
-    && chmod -R 775 /var/www
+    && mkdir -p /home/user/.composer \
+    && chown -R user:user /home/user
 
-# Переключаемся на нового пользователя
+# Создаем необходимые директории Laravel
+RUN mkdir -p /var/www/storage/logs \
+    /var/www/storage/framework/cache \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/framework/views \
+    /var/www/bootstrap/cache
+
+# Устанавливаем правильные права
+RUN chown -R user:www-data /var/www \
+    && chmod -R 775 /var/www/storage \
+    && chmod -R 775 /var/www/bootstrap/cache \
+    && find /var/www/storage -type d -exec chmod g+s {} \; \
+    && find /var/www/bootstrap/cache -type d -exec chmod g+s {} \;
+
+# Создаем директорию для composer cache
+RUN mkdir -p /var/www/.composer && \
+    chown -R user:www-data /var/www/.composer
+
+# Переключаемся на пользователя
 USER user
+
+# Настраиваем переменные окружения для composer
+ENV COMPOSER_HOME=/var/www/.composer
+ENV PATH="${PATH}:/var/www/.composer/vendor/bin"
 
 # Устанавливаем рабочую директорию
 WORKDIR /var/www
 
+# Запускаем cron и php-fpm
 CMD service cron start && php-fpm
