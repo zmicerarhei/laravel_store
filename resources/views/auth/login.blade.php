@@ -33,7 +33,9 @@
                             </div>
                         @endif
                         <button type="submit" class="btn btn-primary w-100">Log in</button>
-                        <a href="{{ route('password.request') }}">Forgot password?</a>
+                        <div class="text-center mt-3">
+                            <a href="{{ route('password.request') }}">Forgot password?</a>
+                        </div>
                     </form>
                 </div>
             </div>

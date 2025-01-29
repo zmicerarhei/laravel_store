@@ -132,11 +132,14 @@
                 </div>
             </div>
 
-            <!-- Social -->
-            <div class="header_social">
+            <!-- Auth -->
+            <div class="header_auth">
                 <ul>
                     @if (Route::has('login'))
                         @auth
+                            <li class="nav-item">
+                                <p>{{ Auth::user()->name }}</p>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                             </li>
@@ -149,7 +152,6 @@
                             </li>
                         @endif
                         @endif
-
                     </ul>
                 </div>
             </header>

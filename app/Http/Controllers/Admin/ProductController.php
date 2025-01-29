@@ -10,11 +10,9 @@ use App\Models\Service;
 use App\Models\Product;
 use App\Contracts\RepositoryInterface;
 use App\Jobs\ExportAndSendReport;
-use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Request;
-use League\Csv\Writer;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -89,7 +87,7 @@ class ProductController extends Controller
 
     public function exportProductsToCsv()
     {
-        ExportAndSendReport::dispatch();
+        ExportAndSendReport::dispatch(Auth::user());
         return redirect()->back()->with('success', 'Отчет отправлен в обработку.');
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Notifications\ReportSavedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class GetAndProcessReport implements ShouldQueue
 {
@@ -14,7 +16,7 @@ class GetAndProcessReport implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected $reportFile)
+    public function __construct(private $reportFile, private $user)
     {
         //
     }
@@ -27,9 +29,12 @@ class GetAndProcessReport implements ShouldQueue
         try {
             $fileName = 'products_report_' . now()->format('Ymd_His') . '.csv';
             Storage::put($fileName, $this->reportFile);
-            Log::info("CSV файл $fileName успешно сохранён");
+            /** @var \App\Models\User $user */
+            $userName = $this->user->name;
+            $this->user->notify(new ReportSavedNotification($fileName));
+            Log::info("Файл $fileName успешно загружен админом $userName");
         } catch (\Exception $e) {
-            Log::error("Ошибка при сохранении CSV: " . $e->getMessage());
+            Log::error("Ошибка при сохранении файла: " . $e->getMessage());
         }
     }
 }

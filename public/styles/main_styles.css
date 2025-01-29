@@ -646,7 +646,7 @@ section {
     color: #767676 !important;
 }
 
-.header_social {
+.header_auth {
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);
@@ -659,14 +659,14 @@ section {
     margin-right: -5px;
 }
 
-.header_social ul li {
+.header_auth ul li {
     display: inline-block;
 }
 
 /* .header_social ul li:not(:last-child) {
     margin-right: 18px;
 } */
-.header_social ul li a i {
+.header_auth ul li a i {
     font-size: 16px;
     color: #b5b5b5;
     padding: 5px;
@@ -677,7 +677,7 @@ section {
     transition: all 200ms ease;
 }
 
-.header_social ul li a i:hover {
+.header_auth ul li a i:hover {
     color: #1b1b1b;
 }
 

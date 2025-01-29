@@ -15,7 +15,7 @@ class ExportAndSendReport implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(private $user)
     {
         //
     }
@@ -30,6 +30,6 @@ class ExportAndSendReport implements ShouldQueue
         $csv = Writer::createFromString();
         $csv->insertOne($fields);
         $csv->insertAll($products);
-        Queue::push(new GetAndProcessReport($csv->toString()));
+        Queue::push(new GetAndProcessReport($csv->toString(), $this->user));
     }
 }
