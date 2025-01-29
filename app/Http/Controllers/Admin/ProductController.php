@@ -9,8 +9,12 @@ use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
 use App\Models\Product;
 use App\Contracts\RepositoryInterface;
+use App\Jobs\ExportAndSendReport;
+use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Request;
+use League\Csv\Writer;
 
 class ProductController extends Controller
 {
@@ -43,7 +47,7 @@ class ProductController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно создан!');
+        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно создан.');
     }
 
     public function edit(Product $product): View
@@ -74,12 +78,18 @@ class ProductController extends Controller
             'price'
         ));
         $product->services()->sync($request->input('services'));
-        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен!');
+        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен.');
     }
 
     public function delete(RepositoryInterface $productRepository, Product $product): RedirectResponse
     {
         $productRepository->deleteProduct($product);
-        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален!');
+        return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален.');
+    }
+
+    public function exportProductsToCsv()
+    {
+        ExportAndSendReport::dispatch();
+        return redirect()->back()->with('success', 'Отчет отправлен в обработку.');
     }
 }
