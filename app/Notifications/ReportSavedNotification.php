@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -16,6 +18,7 @@ class ReportSavedNotification extends Notification implements ShouldQueue
      */
     public function __construct(protected $fileName)
     {
+        //
     }
 
     /**
