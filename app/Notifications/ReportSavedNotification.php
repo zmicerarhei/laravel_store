@@ -14,7 +14,9 @@ class ReportSavedNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected $fileName) {}
+    public function __construct(protected $fileName)
+    {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -31,7 +33,7 @@ class ReportSavedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject('Статус готовности отчёта по продутам')
             ->line("Ваш отчёт {$this->fileName} был успешно сформирован.")
             ->action('Notification Action', url('/'));
