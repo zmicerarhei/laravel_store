@@ -16,7 +16,7 @@ class ReportSavedNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected $fileName)
+    public function __construct(protected string $fileName)
     {
         //
     }

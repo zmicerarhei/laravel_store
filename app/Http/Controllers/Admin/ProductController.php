@@ -85,9 +85,11 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален.');
     }
 
-    public function exportProductsToCsv()
+    public function exportProductsToCsv(): RedirectResponse
     {
-        ExportAndSendReport::dispatch(Auth::user());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        ExportAndSendReport::dispatch($user);
         return redirect()->back()->with('success', 'Отчет отправлен в обработку.');
     }
 }

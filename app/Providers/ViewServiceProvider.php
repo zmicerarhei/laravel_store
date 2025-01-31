@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\CurrencyServiceInterface;
+use App\Http\Controllers\CurrencyController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Brand;
@@ -23,17 +25,17 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function boot(CurrencyServiceInterface $currencyService): void
     {
+        // $currencies = $currencyService->getCurrencies();
+        // dd($currencies);
+
         View::composer(['catalog.index'], function ($view) {
             $view->with('brands', Brand::pluck('name')->all());
         });
 
-        View::composer(['layouts.main'], function ($view) {
-
-            $currencies = Cache::remember('currencies', 600, function () {
-                return Currency::all();
-            });
+        View::composer(['layouts.main'], function ($view) use ($currencyService) {
+            $currencies = $currencyService->getCurrencies();
             $view->with('categories', Category::all());
             $view->with('currencies', $currencies);
         });

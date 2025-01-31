@@ -11,23 +11,63 @@
                 @method('PUT')
             @endif
 
-            @foreach ($fields as $name => $field)
-                <div class="form-group">
-                    <label for="{{ $name }}">{{ $field['label'] }}</label>
-                    <input type="{{ $field['type'] }}" class="form-control @error($name) is-invalid @enderror"
-                        id="{{ $name }}" name="{{ $name }}"
-                        value="{{ old($name, $field['type'] === 'number' ? number_format($product->{$name} ?? 0, 2, '.', '') : $product->{$name} ?? '') }}"
-                        @if (isset($field['max'])) max="{{ $field['max'] }}" @endif
-                        @if (isset($field['min'])) min="{{ $field['min'] }}" @endif
-                        @if (isset($field['step'])) step="{{ $field['step'] }}" @endif>
-                    @error($name)
-                        <div class="form-text text-danger">{{ $message }}</div>
-                    @enderror
-                    @if ($name === 'price')
-                        <small class="form-text text-muted">Введите цену в рублях и копейках.</small>
-                    @endif
-                </div>
-            @endforeach
+            <div class="form-group">
+                <label for="name">Название</label>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
+                    value="{{ old('name', $product->name ?? '') }}">
+                @error('name')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Производитель</label>
+                <input type="text" class="form-control @error('brand') is-invalid @enderror" id="brand"
+                    name="brand" value="{{ old('brand', $product->brand ?? '') }}">
+                @error('brand')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="link">Ссылка на изображение</label>
+                <input type="text" class="form-control @error('link') is-invalid @enderror" id="link" name="link"
+                    value="{{ old('link', $product->link ?? '') }}">
+                @error('link')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <input type="text" class="form-control @error('description') is-invalid @enderror" id="description"
+                    name="description" value="{{ old('description', $product->description ?? '') }}">
+                @error('description')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="release_date">Дата выпуска товара</label>
+                <input type="date" class="form-control @error('release_date') is-invalid @enderror" id="release_date"
+                    name="release_date" value="{{ old('release_date', $product->release_date ?? '') }}"
+                    max="{{ date('Y-m-d') }}">
+                @error('release_date')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="price">Цена (в BYN)</label>
+                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price"
+                    name="price"
+                    value="{{ old('price', isset($product->price) ? number_format($product->price, 2, '.', '') : '') }}"
+                    min="0" step="0.01">
+                @error('price')
+                    <div class="form-text text-danger">{{ $message }}</div>
+                @enderror
+                <small class="form-text text-muted">Введите цену в рублях и копейках.</small>
+            </div>
 
             <div class="form-group">
                 <label>Дополнительные услуги</label><br>

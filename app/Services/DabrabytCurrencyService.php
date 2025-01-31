@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Contracts\CurrencyServiceInterface;
 use App\Models\Currency;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class DabrabytCurrencyService implements CurrencyServiceInterface
@@ -18,7 +20,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         $this->currency_rate = session('sale_rate', 1);
     }
 
-    public function fetchExchangeRates(): void
+    public function updateExchangeRates(): void
     {
         $data = $this->getExchangeRatesFromAPI(config('currency.api_url'));
         $this->saveExchangeRatesToDatabase($data, config('currency.currencies'));
@@ -76,6 +78,14 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         } catch (\Exception $e) {
             throw new \Exception("Failed to save currency data: " . $e->getMessage());
         }
+    }
+
+    public function getCurrencies(): Collection
+    {
+        return Cache::remember('currencies', 600, function () {
+            $this->updateExchangeRates();
+            return Currency::all();
+        });
     }
 
     public function convert(float $price): float

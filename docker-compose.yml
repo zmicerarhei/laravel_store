@@ -56,10 +56,10 @@ services:
         container_name: mysql
         image: mysql:latest
         environment:
-            MYSQL_ROOT_PASSWORD: rootpassword
-            MYSQL_DATABASE: laravel_db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: userpassword
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
         ports:
             - "3307:3306"
         volumes:
@@ -73,9 +73,9 @@ services:
         ports:
             - "8080:80"
         environment:
-            PMA_HOST: mysql
-            PMA_USER: user
-            PMA_PASSWORD: userpassword
+            PMA_HOST: ${DB_HOST}
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
         depends_on:
             - mysql
         networks:
@@ -88,8 +88,8 @@ services:
             - "5672:5672"
             - "15672:15672"
         environment:
-            RABBITMQ_DEFAULT_USER: guest
-            RABBITMQ_DEFAULT_PASS: guest
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
             RABBITMQ_DEFAULT_VHOST: /
         networks:
             - innowise_network

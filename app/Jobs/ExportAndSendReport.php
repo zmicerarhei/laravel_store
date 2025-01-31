@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use League\Csv\Writer;
@@ -17,7 +18,7 @@ class ExportAndSendReport implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private $user)
+    public function __construct(private User $user)
     {
         //
     }

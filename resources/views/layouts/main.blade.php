@@ -80,10 +80,12 @@
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             @foreach ($currencies as $currency)
-                                                <a class="shadow-none dropdown-item shadow-none"
-                                                    href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
-                                                    {{ $currency->iso }}
-                                                </a>
+                                                @if ($currency->iso !== session('currency_iso'))
+                                                    <a class="shadow-none dropdown-item shadow-none"
+                                                        href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
+                                                        {{ $currency->iso }}
+                                                    </a>
+                                                @endif
                                             @endforeach
                                         </div>
                                     </div>

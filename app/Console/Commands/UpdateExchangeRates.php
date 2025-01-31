@@ -7,14 +7,14 @@ namespace App\Console\Commands;
 use App\Contracts\CurrencyServiceInterface;
 use Illuminate\Console\Command;
 
-class FetchExchangeRates extends Command
+class UpdateExchangeRates extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:fetch-exchange-rates';
+    protected $signature = 'app:update-exchange-rates';
 
     /**
      * The console command description.
@@ -28,7 +28,7 @@ class FetchExchangeRates extends Command
      */
     public function handle(CurrencyServiceInterface $currencyService): void
     {
-        $currencyService->fetchExchangeRates();
+        $currencyService->updateExchangeRates();
         $this->info('Exchange rates updated successfully!');
     }
 }
