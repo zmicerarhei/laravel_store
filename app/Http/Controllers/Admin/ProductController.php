@@ -8,11 +8,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
 use App\Models\Product;
+use App\Models\Category;
 use App\Contracts\RepositoryInterface;
 use App\Jobs\ExportAndSendReport;
+use App\Models\Brand;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -22,44 +25,47 @@ class ProductController extends Controller
         return view('admin.products.index', ['products' => $products]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
+        $brands = Brand::all();
+        $categories = Category::all();
         $services = Service::all();
-        $fields = config('productForm.fields');
-        return view('admin.products.create_update', ['services' => $services, 'fields' => $fields]);
+        return view('admin.products.create_update', compact('services', 'brands', 'categories'));
     }
 
     public function store(RepositoryInterface $productRepository, SaveProductRequest $request): RedirectResponse
     {
         $product = $productRepository->createProduct($request->only(
             'name',
-            'brand',
-            'link',
+            'brand_id',
+            'category_id',
             'description',
             'release_date',
             'price'
         ));
 
-        $services = $request->input('services');
-        $product->services()->attach($services, [
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        if ($request->has('services')) {
+            $product->services()->attach($request->input('services'), [
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно создан.');
     }
 
     public function edit(Product $product): View
     {
+        $brands = Brand::all();
+        $categories = Category::all();
         $services = Service::all();
         $product->load('services');
         $selectedServices = $product->services->pluck('id')->toArray();
         $fields = config('productForm.fields');
-        return view('admin.products.create_update', [
-            'product' => $product,
-            'services' => $services,
-            'selectedServices' => $selectedServices,
-            'fields' => $fields
-        ]);
+        return view(
+            'admin.products.create_update',
+            compact('services', 'brands', 'categories', 'selectedServices', 'fields', 'product')
+        );
     }
 
     public function update(
@@ -69,8 +75,8 @@ class ProductController extends Controller
     ): RedirectResponse {
         $productRepository->updateProduct($product, $request->only(
             'name',
-            'brand',
-            'link',
+            'brand_id',
+            'category_id',
             'description',
             'release_date',
             'price'

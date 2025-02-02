@@ -39,7 +39,7 @@ class Product extends Model implements FilterableInterface
     ];
 
     protected $attributes = [
-        'category_id' => 1
+        'link' => null,
     ];
 
     public function services(): BelongsToMany

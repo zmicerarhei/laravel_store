@@ -27,9 +27,6 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(CurrencyServiceInterface $currencyService): void
     {
-        // $currencies = $currencyService->getCurrencies();
-        // dd($currencies);
-
         View::composer(['catalog.index'], function ($view) {
             $view->with('brands', Brand::pluck('name')->all());
         });

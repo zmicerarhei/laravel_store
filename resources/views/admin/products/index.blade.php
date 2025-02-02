@@ -5,9 +5,9 @@
     <div class="admin_top_container">
         <div class="d-flex align-items-center">
             <form action="{{ route('admin.products.create') }}" method="GET">
-                @csrf
-                <button class="btn btn-primary" type="submit">Создать
-                    продукт</button>
+                <button class="btn btn-primary" type="submit">
+                    Создать продукт
+                </button>
             </form>
             <form class="ml-3" action="{{ route('admin.products.export') }}" method="POST">
                 @csrf

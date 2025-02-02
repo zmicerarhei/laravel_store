@@ -1136,12 +1136,14 @@ section {
 }
 
 .product_image {
-    width: 100%;
+    height: 213px;
 }
 
 .product_image img {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .product_content {

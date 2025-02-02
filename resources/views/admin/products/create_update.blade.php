@@ -21,19 +21,33 @@
             </div>
 
             <div class="form-group">
-                <label for="brand">Производитель</label>
-                <input type="text" class="form-control @error('brand') is-invalid @enderror" id="brand"
-                    name="brand" value="{{ old('brand', $product->brand ?? '') }}">
-                @error('brand')
+                <label for="brand_id">Бренд</label>
+                <select class="form-control @error('brand_id') is-invalid @enderror" id="brand_id" name="brand_id">
+                    <option value="">Выберите бренд</option>
+                    @foreach ($brands as $brand)
+                        <option value="{{ $brand->id }}"
+                            {{ old('brand_id', $product->brand_id ?? '') == $brand->id ? 'selected' : '' }}>
+                            {{ $brand->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('brand_id')
                     <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="link">Ссылка на изображение</label>
-                <input type="text" class="form-control @error('link') is-invalid @enderror" id="link" name="link"
-                    value="{{ old('link', $product->link ?? '') }}">
-                @error('link')
+                <label for="category_id">Категория</label>
+                <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
+                    <option value="">Выберите категорию</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"
+                            {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                            {{ $category->title }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
                     <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -62,7 +76,7 @@
                 <input type="number" class="form-control @error('price') is-invalid @enderror" id="price"
                     name="price"
                     value="{{ old('price', isset($product->price) ? number_format($product->price, 2, '.', '') : '') }}"
-                    min="0" step="0.01">
+                    min="0.01" step="0.01">
                 @error('price')
                     <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
