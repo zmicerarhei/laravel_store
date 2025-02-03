@@ -127,6 +127,23 @@ h4::selection,
 h5::selection,
 h6::selection {}
 
+.table td,
+.table th {
+    vertical-align: inherit;
+}
+
+.table-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0.5rem;
+}
+
+.table-controls form,
+.table-controls form button {
+    width: 100%;
+}
+
 button {
     cursor: pointer;
 }
@@ -501,7 +518,9 @@ section {
 }
 
 .shopping_cart {
+    width: 60px;
     display: inline-block;
+    text-align: center;
 }
 
 .shopping_cart a svg {
@@ -536,8 +555,8 @@ section {
     transition: all 200ms ease;
 }
 
-.shopping_cart a div span {
-    margin-left: 4px;
+.shopping_cart span {
+    vertical-align: middle;
 }
 
 .search {
@@ -646,26 +665,14 @@ section {
     color: #767676 !important;
 }
 
-.header_auth {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-    right: 60px;
-    z-index: 1;
-    margin-right: -5px;
+.header_auth ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.header_auth ul li {
-    display: inline-block;
-}
+.header_auth ul li {}
 
-/* .header_social ul li:not(:last-child) {
-    margin-right: 18px;
-} */
 .header_auth ul li a i {
     font-size: 16px;
     color: #b5b5b5;

@@ -56,7 +56,7 @@
                     </td>
                     <td>{{ $product->release_date }}</td>
                     <td>{{ $product->price }}</td>
-                    <td>
+                    <td class="table-controls">
                         <a href="{{ route('admin.products.edit', $product->id) }}"
                             class="btn btn-warning btn-sm">Редактировать</a>
                         <form class="btn-delete" action="{{ route('admin.products.delete', $product) }}" method="POST">

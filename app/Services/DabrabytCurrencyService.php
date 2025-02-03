@@ -33,7 +33,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      * @param string $bankApi URL банка для получения курсов валют.
      *
      * @return array{
-     *     rates: array<int, array{iso: string, buy: string, sale: string}>,
+     *     rates: array<int, array{iso: string, sale: string}>,
      *     retrieved_at: string
      * }
      */
@@ -70,7 +70,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     /**
      * Save exchange rates to database
      *
-     * @param array{rates: \SimpleXMLElement, retrieved_at: string} $data Exchange rates data from API
+     * @param array{rates: array<int, array{iso: string, sale: string}>, retrieved_at: string} $data
      * @param array<string> $currency_types Array of currency ISO codes to process
      * @throws \Exception When unable to save currency data
      */
@@ -103,10 +103,20 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         });
     }
 
+    /**
+     * @param \SimpleXMLElement $xmlObj
+     * @return array<int, array{iso: string, sale: string}>
+     */
     private function parseRatesFromXMLtoArr($xmlObj): array
     {
-        $xmlRates = $xmlObj->filials->filial[0]->rates;
-        $rawRates = json_decode(json_encode($xmlRates), true);
+        $json = json_encode($xmlObj->filials->filial[0]->rates)
+            ?: throw new \RuntimeException('Failed to encode XML to JSON.');
+
+        $rawRates = json_decode($json, true);
+        if (!is_array($rawRates)) {
+            throw new \RuntimeException('Failed to decode JSON to array.');
+        }
+
         $cleanRates = [];
         foreach ($rawRates['value'] as $rate) {
             if (isset($rate['@attributes'])) {
@@ -120,23 +130,16 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         return $cleanRates;
     }
 
+    /**
+     * @return array{
+     *     rates: array<int, array{iso: string, sale: string}>,
+     *     retrieved_at: string
+     * }
+     */
     private function getDefaultRates(): array
     {
         return [
-            'rates' => [
-                [
-                    'iso' => 'USD',
-                    'sale' => '3.35',
-                ],
-                [
-                    'iso' => 'EUR',
-                    'sale' => '3.55',
-                ],
-                [
-                    'iso' => 'RUB',
-                    'sale' => '0.0350',
-                ],
-            ],
+            'rates' => config('currency.fallbackRates'),
             'retrieved_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
     }
