@@ -54,8 +54,7 @@
 
             <div class="form-group">
                 <label for="description">Описание</label>
-                <input type="text" class="form-control @error('description') is-invalid @enderror" id="description"
-                    name="description" value="{{ old('description', $product->description ?? '') }}">
+                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $product->description ?? '') }}</textarea>
                 @error('description')
                     <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
