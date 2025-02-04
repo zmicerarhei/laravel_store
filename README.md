@@ -36,6 +36,12 @@ _The project was developed as part of an internship at the Innowise_.
    make
 ```
 
+-   In order to install pre-commit hook just use this command after project installation:
+
+```shell
+   make setup-hooks
+```
+
 # Usage
 
 -   To see the product catalog, go to http://localhost:8000/products
