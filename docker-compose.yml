@@ -1,5 +1,6 @@
 services:
     nginx:
+        container_name: nginx
         image: nginx:latest
         volumes:
             - ./:/var/www
@@ -8,41 +9,95 @@ services:
             - "8000:80"
         depends_on:
             - app
-        container_name: project_nginx
+        networks:
+            - innowise_network
 
     app:
-        user: "${UID}:${GID}"
+        container_name: app
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+            args:
+                USER_ID: ${UID:-1000}
+        volumes:
+            - ./:/var/www
+            - composer_cache:/var/www/.composer
+        networks:
+            - innowise_network
+
+    cron:
+        container_name: cron
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        user: root
+        command: cron -f
+        volumes:
+            - .:/var/www
+        networks:
+            - innowise_network
+
+    worker:
+        container_name: queue_worker
         build:
             context: .
             dockerfile: _docker/app/Dockerfile
         volumes:
-            - ./:/var/www
-        container_name: project_app
+            - .:/var/www
+        command: php artisan queue:work --sleep=3 --tries=3
+        restart: always
+        depends_on:
+            - app
+            - mysql
+        networks:
+            - innowise_network
 
     mysql:
+        container_name: mysql
         image: mysql:latest
-        container_name: project_mysql
         environment:
-            MYSQL_ROOT_PASSWORD: rootpassword
-            MYSQL_DATABASE: laravel_db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: userpassword
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
         ports:
             - "3307:3306"
         volumes:
             - mysql_data:/var/lib/mysql
+        networks:
+            - innowise_network
 
     phpmyadmin:
+        container_name: phpmyadmin
         image: phpmyadmin/phpmyadmin:latest
-        container_name: project_phpmyadmin
         ports:
             - "8080:80"
         environment:
-            PMA_HOST: mysql
-            PMA_USER: user
-            PMA_PASSWORD: userpassword
+            PMA_HOST: ${DB_HOST}
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
         depends_on:
             - mysql
+        networks:
+            - innowise_network
+
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        environment:
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+            RABBITMQ_DEFAULT_VHOST: /
+        networks:
+            - innowise_network
 
 volumes:
     mysql_data:
+    composer_cache:
+
+networks:
+    innowise_network:
+        driver: bridge

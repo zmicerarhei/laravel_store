@@ -11,7 +11,7 @@ class CurrencyController extends Controller
 {
     public function updateRates(CurrencyServiceInterface $currencyService): RedirectResponse
     {
-        $currencyService->fetchExchangeRates();
+        $currencyService->updateExchangeRates();
         return back()->with('message', 'Rates have been updated.');
     }
 

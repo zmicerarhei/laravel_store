@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Filterable\Interfaces\Filterable as FilterableInterface;
 use Filterable\Traits\Filterable as TraitsFilterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Product extends Model implements FilterableInterface
 {
     use TraitsFilterable;
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -37,7 +39,7 @@ class Product extends Model implements FilterableInterface
     ];
 
     protected $attributes = [
-        'category_id' => 1
+        'link' => null,
     ];
 
     public function services(): BelongsToMany

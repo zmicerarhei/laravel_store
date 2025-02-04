@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="header_content d-flex flex-row align-items-center justify-content-between">
-                                <div class="logo"><a href={{ route('client.home.index') }}>Innowise shop</a></div>
+                                <div class="logo"><a href={{ route('client.home.index') }}>Inno shop</a></div>
                                 <nav class="main_nav">
                                     <ul>
                                         <li>
@@ -66,10 +66,8 @@
                                                             c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z" />
                                                 </g>
                                             </svg>
-                                            <div>
-                                                <span>(0)</span>
-                                            </div>
                                         </a>
+                                        <span>(0)</span>
                                     </div>
                                     <div class="dropdown show">
                                         <a class="btn btn-secondary dropdown-toggle btn-sm shadow-none" href="#"
@@ -80,10 +78,12 @@
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             @foreach ($currencies as $currency)
-                                                <a class="shadow-none dropdown-item shadow-none"
-                                                    href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
-                                                    {{ $currency->iso }}
-                                                </a>
+                                                @if ($currency->iso !== session('currency_iso'))
+                                                    <a class="shadow-none dropdown-item shadow-none"
+                                                        href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
+                                                        {{ $currency->iso }}
+                                                    </a>
+                                                @endif
                                             @endforeach
                                         </div>
                                     </div>
@@ -109,49 +109,53 @@
                                             </svg>
                                         </div>
                                     </div>
+                                    <!-- Auth -->
+                                    <div class="header_auth">
+                                        <ul>
+                                            @if (Route::has('login'))
+                                                @auth
+                                                    <li class="nav-item text-center">
+                                                        <p>{{ Auth::user()->name }}</p>
+                                                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                                                    </li>
+                                                @else
+                                                    <li class="mr-2">
+                                                        <a class="btn btn-primary btn-sm"
+                                                            href="{{ route('register') }}">Sing
+                                                            up</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="btn btn-secondary btn-sm" href="{{ route('login') }}">Log
+                                                            in</a>
+                                                    </li>
+                                                @endif
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="hamburger"><i class="fa fa-bars" aria-hidden="true"></i></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Search Panel -->
-            <div class="search_panel trans_300">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
-                                <form action="#">
-                                    <input type="text" class="search_input" placeholder="Search" required="required">
-                                </form>
+                <!-- Search Panel -->
+                <div class="search_panel trans_300">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
+                                    <form action="#">
+                                        <input type="text" class="search_input" placeholder="Search" required="required">
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Social -->
-            <div class="header_social">
-                <ul>
-                    @if (Route::has('login'))
-                        @auth
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-                            </li>
-                        @else
-                            <li class="mr-2">
-                                <a class="btn btn-primary" href="{{ route('register') }}">Sing up</a>
-                            </li>
-                            <li>
-                                <a class="btn btn-secondary" href="{{ route('login') }}">Log in</a>
-                            </li>
-                        @endif
-                        @endif
 
-                    </ul>
-                </div>
             </header>
 
             <!-- Menu -->
@@ -230,7 +234,7 @@
                         <div class="col">
                             <div
                                 class="footer_content d-flex flex-lg-row flex-column align-items-center justify-content-lg-start justify-content-center">
-                                <div class="footer_logo"><a href={{ route('client.home.index') }}>Innowise shop</a>
+                                <div class="footer_logo"><a href={{ route('client.home.index') }}>Inno shop</a>
                                 </div>
                                 <div class="copyright ml-auto mr-auto">
                                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->

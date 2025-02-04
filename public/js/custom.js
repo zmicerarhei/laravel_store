@@ -40,7 +40,7 @@ $(document).ready(function () {
 	initHomeSlider();
 	initSearch();
 	initMenu();
-	initIsotope();
+	// initIsotope();
 
 	/* 
 
@@ -257,9 +257,6 @@ $(document).ready(function () {
 
 	}
 
-});
-
-$(document).ready(function () {
 	$('.modal').on('show.bs.modal', function () {
 		$('.header_container').addClass('padding_right_15');
 		$('.header_social').addClass('padding_right_15');
@@ -269,4 +266,5 @@ $(document).ready(function () {
 		$('.header_container').removeClass('padding_right_15');
 		$('.header_social').removeClass('padding_right_15');
 	});
+
 });

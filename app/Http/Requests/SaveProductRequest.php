@@ -22,12 +22,11 @@ class SaveProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:100',
-            'brand' => 'required|string|min:2|max:50',
-            'link' => 'nullable|string',
+            'brand_id' => 'required|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'required|string|min:10',
-            'release_date' => 'required|date',
+            'release_date' => 'required|date|before_or_equal:today',
             'price' => 'required|numeric|min:0.01',
-            'services' => 'required|array',
         ];
     }
 }

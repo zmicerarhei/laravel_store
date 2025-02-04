@@ -127,6 +127,23 @@ h4::selection,
 h5::selection,
 h6::selection {}
 
+.table td,
+.table th {
+    vertical-align: inherit;
+}
+
+.table-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0.5rem;
+}
+
+.table-controls form,
+.table-controls form button {
+    width: 100%;
+}
+
 button {
     cursor: pointer;
 }
@@ -501,7 +518,9 @@ section {
 }
 
 .shopping_cart {
+    width: 60px;
     display: inline-block;
+    text-align: center;
 }
 
 .shopping_cart a svg {
@@ -536,8 +555,8 @@ section {
     transition: all 200ms ease;
 }
 
-.shopping_cart a div span {
-    margin-left: 4px;
+.shopping_cart span {
+    vertical-align: middle;
 }
 
 .search {
@@ -646,27 +665,15 @@ section {
     color: #767676 !important;
 }
 
-.header_social {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-    right: 60px;
-    z-index: 1;
-    margin-right: -5px;
+.header_auth ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.header_social ul li {
-    display: inline-block;
-}
+.header_auth ul li {}
 
-/* .header_social ul li:not(:last-child) {
-    margin-right: 18px;
-} */
-.header_social ul li a i {
+.header_auth ul li a i {
     font-size: 16px;
     color: #b5b5b5;
     padding: 5px;
@@ -677,7 +684,7 @@ section {
     transition: all 200ms ease;
 }
 
-.header_social ul li a i:hover {
+.header_auth ul li a i:hover {
     color: #1b1b1b;
 }
 
@@ -1136,12 +1143,14 @@ section {
 }
 
 .product_image {
-    width: 100%;
+    height: 213px;
 }
 
 .product_image img {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .product_content {
@@ -1521,6 +1530,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 47px;
 }
 
 .admin_notification_close.close {
@@ -1528,10 +1538,6 @@ section {
     right: 2px;
     padding: 0;
     outline: none;
-}
-
-.admin_create_btn.btn {
-    padding: 0.75rem 1.25rem;
 }
 
 /* Sorting Bar */

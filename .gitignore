@@ -22,4 +22,4 @@ yarn-error.log
 /.idea
 /.nova
 /.vscode
-/.zed
+/.zed.php-cs-fixer.php

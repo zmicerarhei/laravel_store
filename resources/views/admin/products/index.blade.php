@@ -3,9 +3,19 @@
 @section('content')
     <h1>Список продуктов</h1>
     <div class="admin_top_container">
-        <a href="{{ route('admin.products.create') }}" class="btn btn-primary mb-3 admin_create_btn">Создать новый продукт</a>
+        <div class="d-flex align-items-center">
+            <form action="{{ route('admin.products.create') }}" method="GET">
+                <button class="btn btn-primary" type="submit">
+                    Создать продукт
+                </button>
+            </form>
+            <form class="ml-3" action="{{ route('admin.products.export') }}" method="POST">
+                @csrf
+                <button class="btn btn-primary" type="submit">Экспорт продуктов</button>
+            </form>
+        </div>
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
                 {{ session('success') }}
                 <button type="button" class="close admin_notification_close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -13,7 +23,7 @@
             </div>
         @endif
     </div>
-    <table class="table table-striped">
+    <table class="table table-striped mt-3">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
@@ -46,7 +56,7 @@
                     </td>
                     <td>{{ $product->release_date }}</td>
                     <td>{{ $product->price }}</td>
-                    <td>
+                    <td class="table-controls">
                         <a href="{{ route('admin.products.edit', $product->id) }}"
                             class="btn btn-warning btn-sm">Редактировать</a>
                         <form class="btn-delete" action="{{ route('admin.products.delete', $product) }}" method="POST">
