@@ -62,3 +62,5 @@ stop: ## stop all containers
 
 restart: stop start ## restart all containers
 	
+setup-hooks: ## Set up Git hooks
+	docker compose exec -it app vendor/bin/cghooks add

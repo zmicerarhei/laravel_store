@@ -17,6 +17,7 @@
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.1"
     },
     "require-dev": {
+        "brainmaestro/composer-git-hooks": "^3.0",
         "fakerphp/faker": "^1.23",
         "friendsofphp/php-cs-fixer": "^3.68",
         "larastan/larastan": "^3.0",
@@ -73,6 +74,13 @@
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "hooks": {
+            "pre-commit": [
+                "./vendor/bin/phpstan clear-result-cache",
+                "./vendor/bin/phpstan analyse --configuration=phpstan.neon",
+                "./vendor/bin/phpcs --standard=PSR12 app"
+            ]
         }
     },
     "config": {
