@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class ProductServices
+ * Class ProductsServices
  *
  * @property int $product_id
  * @property int $service_id
  */
-class ProductServices extends Model
+class ProductsServices extends Model
 {
     protected $fillable = [
         'product_id',

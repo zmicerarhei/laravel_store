@@ -13,9 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository implements RepositoryInterface
 {
-    public function __construct(protected ProductFilter $productFilter)
-    {
-    }
+    public function __construct(protected ProductFilter $productFilter) {}
 
     /**
      * Get products.
@@ -48,6 +46,12 @@ class ProductRepository implements RepositoryInterface
     public function deleteProduct(Product $product): void
     {
         $product->delete();
+    }
+
+    public function getRandomProducts(int $count)
+    {
+        $products = Product::inRandomOrder()->take($count)->get();
+        return $products;
     }
 
     protected function buildProductQuery(string $category_slug): Builder

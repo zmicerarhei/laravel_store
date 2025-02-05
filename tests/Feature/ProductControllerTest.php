@@ -50,7 +50,7 @@ class ProductControllerTest extends TestCase
 
         if ($product) {
             foreach ($this->testData['services'] as $serviceId) {
-                $this->assertDatabaseHas('product_services', [
+                $this->assertDatabaseHas('products_services', [
                     'product_id' => $product->id,
                     'service_id' => $serviceId
                 ]);
