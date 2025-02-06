@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function index(RepositoryInterface $productRepository): View
+    public function index(ProductService $productService): View
     {
-        $products = $productRepository->getRandomProducts(12);
+        $products = $productService->getRandomProducts(8);
 
         /**
          * @var view-string $viewName

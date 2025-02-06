@@ -6,15 +6,16 @@ namespace App\Contracts;
 
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
-interface RepositoryInterface
+interface ProductRepositoryInterface
 {
     /**
      * Get all products.
      *
      *  @return LengthAwarePaginator<Product>
      */
-    public function getProducts(int $perPage, string $orderBy, string $category): LengthAwarePaginator;
+    public function getProducts(Builder $query, int $perPage): LengthAwarePaginator;
 
     /**
      * Create product.
