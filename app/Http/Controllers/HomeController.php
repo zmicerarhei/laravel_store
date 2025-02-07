@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Services\ProductService;
+use App\Services\ClientProductService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function index(ProductService $productService): View
+    public function index(ClientProductService $ClientProductService): View
     {
-        $products = $productService->getRandomProducts(8);
+        $products = $ClientProductService->getRandomProducts(8);
 
         /**
          * @var view-string $viewName

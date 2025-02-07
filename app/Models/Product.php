@@ -44,7 +44,7 @@ class Product extends Model implements FilterableInterface
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, 'products_services');
+        return $this->belongsToMany(Service::class, 'products_services')->withTimestamps();
     }
 
     public function brand(): BelongsTo

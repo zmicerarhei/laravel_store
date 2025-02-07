@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class ProductControllerTest extends TestCase
+class AdminProductControllerTest extends TestCase
 {
     private array $testData = [
         'name' => 'New product',

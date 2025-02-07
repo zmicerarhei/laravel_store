@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\ProductRepositoryInterface;
+use App\Contracts\AdminProductServiceInterface;
+use App\Contracts\ClientProductServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Service;
@@ -17,25 +20,25 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
+    public function __construct(private AdminProductServiceInterface $adminProductService) {}
+
     public function index(): View
     {
-        $products = Product::with(['brand', 'services'])->get();
+        $products = $this->adminProductService->getAllProducts();
         return view('admin.products.index', ['products' => $products]);
     }
 
-    public function create(Request $request): View
+    public function create(): View
     {
-        $brands = Brand::all();
-        $categories = Category::all();
-        $services = Service::all();
-        return view('admin.products.create_update', compact('services', 'brands', 'categories'));
+        $data = $this->adminProductService->getDataForCreateView();
+        return view('admin.products.create_update', $data);
     }
 
-    public function store(RepositoryInterface $productRepository, SaveProductRequest $request): RedirectResponse
+    public function store(SaveProductRequest $request): RedirectResponse
     {
-        $product = $productRepository->createProduct($request->only(
+        $product = $this->adminProductService->addNewProduct($request->only(
             'name',
             'brand_id',
             'category_id',
@@ -44,12 +47,7 @@ class ProductController extends Controller
             'price'
         ));
 
-        if ($request->has('services')) {
-            $product->services()->attach($request->input('services'), [
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        $this->adminProductService->syncServicesToProduct($product, $request->input('services') ?? []);
 
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно создан.');
     }
@@ -69,7 +67,7 @@ class ProductController extends Controller
     }
 
     public function update(
-        RepositoryInterface $productRepository,
+        ProductRepositoryInterface $productRepository,
         SaveProductRequest $request,
         Product $product
     ): RedirectResponse {
@@ -85,7 +83,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен.');
     }
 
-    public function delete(RepositoryInterface $productRepository, Product $product): RedirectResponse
+    public function delete(ProductRepositoryInterface $productRepository, Product $product): RedirectResponse
     {
         $productRepository->deleteProduct($product);
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален.');

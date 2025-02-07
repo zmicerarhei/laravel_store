@@ -13,4 +13,6 @@ interface CurrencyServiceInterface
     public function getCurrencies(): Collection;
 
     public function convert(float $price): float;
+
+    public function setCurrencyToSession(string $iso, float $rate): void;
 }

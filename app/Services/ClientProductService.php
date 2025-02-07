@@ -6,12 +6,15 @@ namespace App\Services;
 
 use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\ProductRepositoryInterface;
+use App\Contracts\ClientProductServiceInterface;
 use App\Filters\ProductFilter;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class ProductService
+class ClientProductService implements ClientProductServiceInterface
 {
     public function __construct(
         private ProductRepositoryInterface $productRepository,
@@ -23,8 +26,8 @@ class ProductService
         int $perPage,
         ?string $orderBy,
         string $category_slug,
-        array $relations = ['brand', 'category']
-    ) {
+        array $relations
+    ): LengthAwarePaginator {
         /**
          * @var \Illuminate\Database\Eloquent\Builder<\App\Models\Product> $query
          */
@@ -39,9 +42,28 @@ class ProductService
         return $products;
     }
 
-    public function getRandomProducts($count)
+    public function getRandomProducts(int $count): Collection
     {
         return Product::inRandomOrder()->take($count)->get();
+    }
+
+    public function updatePrices(Product $product): void
+    {
+        foreach ($product->services as $service) {
+            /** @var Service $service */
+            $service->price = $this->currencyService->convert((float)$service->price);
+        }
+
+        $product->price = $this->currencyService->convert((float)$product->price);
+    }
+
+    /**
+     * @param LengthAwarePaginator<Product> $products
+     * @return string
+     */
+    public function generateAjaxResponse(LengthawarePaginator $products): string
+    {
+        return view('partials.products', compact('products'))->render();
     }
 
     private function buildProductQuery(string $category_slug): Builder

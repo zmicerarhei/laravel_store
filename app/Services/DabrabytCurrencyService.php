@@ -27,6 +27,23 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         $this->saveExchangeRatesToDatabase($data, config('currency.currencies'));
     }
 
+    public function getCurrencies(): Collection
+    {
+        return Cache::remember('currencies', 600, function () {
+            $this->updateExchangeRates();
+            return Currency::all();
+        });
+    }
+    public function convert(float $price): float
+    {
+        return round($price / $this->currency_rate, 2);
+    }
+
+    public function setCurrencyToSession(string $iso, float $rate): void
+    {
+        session(['currency_iso' => $iso, 'sale_rate' => $rate]);
+    }
+
     /**
      * Получает курсы валют с API банка.
      *
@@ -95,13 +112,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         }
     }
 
-    public function getCurrencies(): Collection
-    {
-        return Cache::remember('currencies', 600, function () {
-            $this->updateExchangeRates();
-            return Currency::all();
-        });
-    }
 
     /**
      * @param \SimpleXMLElement $xmlObj
@@ -142,10 +152,5 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             'rates' => config('currency.fallbackRates'),
             'retrieved_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
-    }
-
-    public function convert(float $price): float
-    {
-        return round($price / $this->currency_rate, 2);
     }
 }
