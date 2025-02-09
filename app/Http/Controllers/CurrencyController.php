@@ -9,7 +9,9 @@ use Illuminate\Http\RedirectResponse;
 
 class CurrencyController extends Controller
 {
-    public function __construct(private CurrencyServiceInterface $currencyService) {}
+    public function __construct(private CurrencyServiceInterface $currencyService)
+    {
+    }
     public function changeCurrency(string $iso, float $rate): RedirectResponse
     {
         $this->currencyService->setCurrencyToSession($iso, $rate);

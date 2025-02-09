@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Contracts\CategoryServiceInterface;
-use App\Contracts\CurrencyServiceInterface;
-use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
@@ -15,9 +13,7 @@ use Illuminate\Http\Request;
 class CatalogController extends Controller
 {
     public function __construct(
-        private ProductRepositoryInterface $productRepository,
         private ClientProductServiceInterface $ClientProductService,
-        private CurrencyServiceInterface $currencyService,
         private CategoryServiceInterface $categoryservice
     ) {
         //
@@ -26,10 +22,10 @@ class CatalogController extends Controller
     public function index(Request $request, string $category_slug = 'all-categories'): View|string
     {
         $products  = $this->ClientProductService->getPaginatedProducts(
-            8,
+            Product::ITEMS_PER_PAGE,
             $request->input('orderBy'),
             $category_slug,
-            ['brand', 'category']
+            Product::DEFAULT_RELATIONS,
         );
 
         if ($request->ajax()) {

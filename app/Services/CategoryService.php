@@ -10,10 +10,12 @@ use App\Repositories\CategoryRepository;
 
 class CategoryService implements CategoryServiceInterface
 {
-    public function __construct(private CategoryRepository $categoryRepository) {}
+    public function __construct(private CategoryRepository $categoryRepository)
+    {
+    }
 
     public function getCategoryBySlug(string $slug): ?Category
     {
-        return $slug !== 'all-categories' ? $this->categoryRepository->getCategoryBySlug($slug)  : null;
+        return $slug !== 'all-categories' ? $this->categoryRepository->getCategoryBySlug($slug) : null;
     }
 }

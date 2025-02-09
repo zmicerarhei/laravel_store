@@ -5,20 +5,63 @@ declare(strict_types=1);
 namespace App\Contracts;
 
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface AdminProductServiceInterface
 {
-    public function getAllProducts();
+    /**
+     * Retrieves all products.
+     * @return LengthAwarePaginator<Product>
+     */
+    public function getAllProducts(): LengthAwarePaginator;
 
-    public function getDataForCreateView();
+    /**
+     * Retrieves the data for creating a view.
+     *
+     * @return array<string, mixed>
+     */
+    public function getDataForCreateView(): array;
 
-    public function addNewProduct(array $data);
+    /**
+     * Retrieves the data for editing a view.
+     *
+     * @return array<string, mixed>
+     */
+    public function getDataForEditView(Product $product): array;
 
-    public function syncServicesToProduct(Product $product, array $services);
+    /**
+     * Adds a new product.
+     * @param array<string, mixed> $data
+     * @return Product
+     */
+    public function addNewProduct(array $data): Product;
 
-    // public function deleteProduct(Product $product);
+    /**
+     * Updates a product.
+     * @param Product $product
+     * @param array<string, mixed> $data
+     * @return bool
+     */
+    public function updateProduct(Product $product, array $data): bool;
 
-    // public function updateProduct(Product $product, array $data);
+    /**
+     * Deletes a product.
+     * @param Product $product
+     * @return bool|null
+     */
+    public function deleteProduct(Product $product): ?bool;
 
-    // public function exportProductsToCsv();
+    /**
+     * Syncs services to a product.
+     * @param Product $product
+     * @param array<int, int> $services
+     */
+    public function syncServicesToProduct(Product $product, array $services): void;
+
+    /**
+     * Exports products to CSV.
+     * @param User $user
+     */
+    public function exportProductsToCsv(User $user): void;
 }

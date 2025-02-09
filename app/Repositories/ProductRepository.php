@@ -7,19 +7,15 @@ namespace App\Repositories;
 use App\Contracts\ProductRepositoryInterface;
 use App\Filters\ProductFilter;
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function __construct(protected ProductFilter $productFilter) {}
+    public function __construct(protected ProductFilter $productFilter)
+    {
+    }
 
-    /**
-     * Get products.
-     *
-     *  @return LengthAwarePaginator<Product>
-     */
     public function getProducts($query, $perPage): LengthAwarePaginator
     {
         return $query->paginate($perPage);
@@ -30,18 +26,17 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::create($data);
     }
 
-    public function updateProduct(Product $product, array $data): Product
+    public function updateProduct(Product $product, array $data): bool
     {
-        $product->updateOrFail($data);
-        return $product;
+        return $product->updateOrFail($data);
     }
 
-    public function deleteProduct(Product $product): void
+    public function deleteProduct(Product $product): ?bool
     {
-        $product->delete();
+        return $product->delete();
     }
 
-    public function getRandomProducts(int $count)
+    public function getRandomProducts(int $count): Collection
     {
         return Product::inRandomOrder()->take($count)->get();
     }

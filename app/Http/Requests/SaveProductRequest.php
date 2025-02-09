@@ -21,12 +21,12 @@ class SaveProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:2|max:100',
-            'brand_id' => 'required|exists:brands,id',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'required|string|min:10',
-            'release_date' => 'required|date|before_or_equal:today',
-            'price' => 'required|numeric|min:0.01',
+            'name'          => ['required', 'string', 'min:2', 'max:100'],
+            'brand_id'      => ['required', 'exists:brands,id'],
+            'category_id'   => ['required', 'exists:categories,id'],
+            'description'   => ['required', 'string', 'min:10'],
+            'release_date'  => ['required', 'date', 'before_or_equal:today'],
+            'price'         => ['required', 'numeric', 'min:0.01'],
         ];
     }
 }

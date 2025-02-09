@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
@@ -12,7 +13,6 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClientProductService implements ClientProductServiceInterface
 {
@@ -20,7 +20,8 @@ class ClientProductService implements ClientProductServiceInterface
         private ProductRepositoryInterface $productRepository,
         private ProductFilter $productFilter,
         private CurrencyServiceInterface $currencyService
-    ) {}
+    ) {
+    }
 
     public function getPaginatedProducts(
         int $perPage,
@@ -50,7 +51,7 @@ class ClientProductService implements ClientProductServiceInterface
     public function updatePrices(Product $product): void
     {
         foreach ($product->services as $service) {
-            /** @var Service $service */
+            /** @var \App\Models\Service $service */
             $service->price = $this->currencyService->convert((float)$service->price);
         }
 

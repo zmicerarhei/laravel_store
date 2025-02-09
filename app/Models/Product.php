@@ -28,6 +28,9 @@ class Product extends Model implements FilterableInterface
     use TraitsFilterable;
     use HasFactory;
 
+    public const ITEMS_PER_PAGE = 8;
+    public const DEFAULT_RELATIONS = ['brand', 'category'];
+
     protected $fillable = [
         'name',
         'description',

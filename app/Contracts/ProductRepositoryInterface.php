@@ -7,12 +7,14 @@ namespace App\Contracts;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 interface ProductRepositoryInterface
 {
     /**
      * Get all products.
-     *
+     *  @param Builder $query
+     *  @param int $perPage
      *  @return LengthAwarePaginator<Product>
      */
     public function getProducts(Builder $query, int $perPage): LengthAwarePaginator;
@@ -30,15 +32,23 @@ interface ProductRepositoryInterface
      *
      * @param Product $product
      * @param array<string, mixed> $data
-     * @return Product
+     * @return bool
      */
-    public function updateProduct(Product $product, array $data): Product;
+    public function updateProduct(Product $product, array $data): bool;
 
     /**
      * Delete product.
      *
      * @param Product $product
-     * @return void
+     * @return bool|null
      */
-    public function deleteProduct(Product $product): void;
+    public function deleteProduct(Product $product): ?bool;
+
+    /**
+     * Get random products.
+     *
+     * @param int $count
+     * @return Collection<Product>
+     */
+    public function getRandomProducts(int $count): Collection;
 }
