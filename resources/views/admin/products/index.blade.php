@@ -69,4 +69,7 @@
             @endforeach
         </tbody>
     </table>
+    <div class="pb-3 products_pagination">
+        {{ $products->appends(request()->query())->links() }}
+    </div>
 @endsection

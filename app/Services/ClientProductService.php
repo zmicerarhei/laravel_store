@@ -58,15 +58,18 @@ class ClientProductService implements ClientProductServiceInterface
         $product->price = $this->currencyService->convert((float)$product->price);
     }
 
-    /**
-     * @param LengthAwarePaginator<Product> $products
-     * @return string
-     */
     public function generateAjaxResponse(LengthawarePaginator $products): string
     {
         return view('partials.products', compact('products'))->render();
     }
 
+    /**
+     * Builds the product query.
+     *
+     * @param string $category_slug
+     * @return Builder<Product>
+     *
+     */
     private function buildProductQuery(string $category_slug): Builder
     {
         $query = Product::query();
@@ -79,6 +82,12 @@ class ClientProductService implements ClientProductServiceInterface
         return $query;
     }
 
+    /**
+     *  Applies sorting to the query.
+     *
+     * @param Builder<Product> $query
+     * @param string|null $orderBy
+     */
     private function applySorting(Builder $query, ?string $orderBy): void
     {
         $orderByConfig = match ($orderBy) {

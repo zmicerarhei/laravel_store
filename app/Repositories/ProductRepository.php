@@ -9,6 +9,7 @@ use App\Filters\ProductFilter;
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -16,7 +17,10 @@ class ProductRepository implements ProductRepositoryInterface
     {
     }
 
-    public function getProducts($query, $perPage): LengthAwarePaginator
+    /**
+     * @return LengthAwarePaginator<Product>
+     */
+    public function getProducts(Builder $query, int $perPage): LengthAwarePaginator
     {
         return $query->paginate($perPage);
     }

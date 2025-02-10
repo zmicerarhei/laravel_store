@@ -13,7 +13,7 @@ interface ProductRepositoryInterface
 {
     /**
      * Get all products.
-     *  @param Builder $query
+     *  @param Builder<Product> $query
      *  @param int $perPage
      *  @return LengthAwarePaginator<Product>
      */
@@ -48,7 +48,7 @@ interface ProductRepositoryInterface
      * Get random products.
      *
      * @param int $count
-     * @return Collection<Product>
+     * @return Collection<int, Product>
      */
     public function getRandomProducts(int $count): Collection;
 }

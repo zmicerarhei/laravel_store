@@ -18,14 +18,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $description
  * @property string $release_date
  * @property float $price
- * @property string $link
+ * @property string|null $link
  * @property int $category_id
  * @property int $brand_id
+ *
+ * @property Brand $brand
+ * @property Category $category
+ * @property \Illuminate\Database\Eloquent\Collection<int, Service> $services
  */
-
 class Product extends Model implements FilterableInterface
 {
     use TraitsFilterable;
+
+    /**
+     * @use HasFactory<\Database\Factories\ProductFactory>
+     */
     use HasFactory;
 
     public const ITEMS_PER_PAGE = 8;
@@ -38,25 +45,40 @@ class Product extends Model implements FilterableInterface
         'price',
         'link',
         'category_id',
-        'brand_id'
+        'brand_id',
     ];
 
     protected $attributes = [
         'link' => null,
     ];
 
+    /**
+     *
+     * @return BelongsToMany<Product, Service>
+     */
     public function services(): BelongsToMany
     {
+        /** @var BelongsToMany<Product, Service> */
         return $this->belongsToMany(Service::class, 'products_services')->withTimestamps();
     }
 
+    /**
+     *
+     * @return BelongsTo<Brand, Product>
+     */
     public function brand(): BelongsTo
     {
+        /** @var BelongsTo<Brand, Product> */
         return $this->belongsTo(Brand::class);
     }
 
-    public function category(): belongsTo
+    /**
+     *
+     * @return BelongsTo<Category, Product>
+     */
+    public function category(): BelongsTo
     {
+        /** @var BelongsTo<Category, Product> */
         return $this->belongsTo(Category::class);
     }
 }

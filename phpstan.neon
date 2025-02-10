@@ -6,5 +6,4 @@ parameters:
         - app
     level: 8
     ignoreErrors:
-        - identifier: missingType.generics
     excludePaths:

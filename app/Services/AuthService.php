@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\AuthServiceInterface;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
-    public function __construct()
-    {
-    }
-
-    public function createUser(array $data): User
+    public function signUp(array $data): User
     {
         $user = User::create($data);
         event(new Registered($user));
@@ -42,11 +41,19 @@ class AuthService
 
     public function getRedirectDependsOnRole(): string
     {
-
         if (Auth::check() && Auth::user()?->role === 'admin') {
             return '/admin/products';
         }
 
         return '/';
+    }
+
+    public function updateUserPassword(User $user, string $password): void
+    {
+        $user->forceFill([
+            'password' => bcrypt($password),
+        ])->setRememberToken(Str::random(60));
+        $user->save();
+        event(new PasswordReset($user));
     }
 }

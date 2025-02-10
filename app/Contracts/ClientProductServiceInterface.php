@@ -26,9 +26,26 @@ interface ClientProductServiceInterface
         array $relations,
     ): LengthAwarePaginator;
 
+    /**
+     * Get random products.
+     *
+     * @param int $count
+     * @return Collection<int, Product>
+     */
     public function getRandomProducts(int $count): Collection;
 
+    /**
+     * Update prices according to currency.
+     *
+     * @param Product $product
+     */
     public function updatePrices(Product $product): void;
 
-    public function generateAjaxResponse(LengthawarePaginator $product): string;
+    /**
+     * Generate ajax response.
+     *
+     * @param LengthAwarePaginator<Product> $products
+     * @return string
+     */
+    public function generateAjaxResponse(LengthawarePaginator $products): string;
 }

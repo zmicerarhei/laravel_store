@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $img
  * @property string $slug
  */
-
 class Category extends Model
 {
     protected $fillable = [
@@ -26,8 +25,13 @@ class Category extends Model
         'slug'
     ];
 
+    /**
+     *
+     * @return HasMany<Product, Category>
+     */
     public function products(): HasMany
     {
+        /** @var HasMany<Product, Category> */
         return $this->hasMany(Product::class);
     }
 }

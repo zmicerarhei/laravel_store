@@ -45,9 +45,9 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     }
 
     /**
-     * Получает курсы валют с API банка.
+     * Get exchange rates from API.
      *
-     * @param string $bankApi URL банка для получения курсов валют.
+     * @param string $bankApi
      *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
@@ -71,7 +71,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             }
 
             $time = $date->format('Y-m-d H:i:s');
-
             $ratesArr = $this->parseRatesFromXMLtoArr($xmlObj);
 
             return [
@@ -80,6 +79,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             ];
         } catch (\Exception $e) {
             Log::error('API request failed: ' . $e->getMessage());
+
             return $this->getDefaultRates();
         }
     }
@@ -88,8 +88,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      * Save exchange rates to database
      *
      * @param array{rates: array<int, array{iso: string, sale: string}>, retrieved_at: string} $data
-     * @param array<string> $currency_types Array of currency ISO codes to process
-     * @throws \Exception When unable to save currency data
+     * @param array<string> $currency_types
      */
     private function saveExchangeRatesToDatabase(array $data, array $currency_types): void
     {
@@ -114,6 +113,8 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
 
 
     /**
+     *  Parse rates from XML to array
+     *
      * @param \SimpleXMLElement $xmlObj
      * @return array<int, array{iso: string, sale: string}>
      */
@@ -141,6 +142,8 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     }
 
     /**
+     *  Get default exchange rates
+     *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
      *     retrieved_at: string

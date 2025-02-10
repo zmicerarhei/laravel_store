@@ -6,6 +6,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Currency
+ *
+ * @property string $iso
+ * @property float $sale_rate
+ * @property string $retrieved_at
+ */
 class Currency extends Model
 {
     protected $fillable = [

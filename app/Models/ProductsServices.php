@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $product_id
  * @property int $service_id
+ * @property-read Product $product
+ * @property-read Service $service
  */
 class ProductsServices extends Model
 {
@@ -20,13 +22,23 @@ class ProductsServices extends Model
         'service_id',
     ];
 
+    /**
+     *
+     * @return BelongsTo<Product, ProductsServices>
+     */
     public function product(): BelongsTo
     {
+        /** @var BelongsTo<Product, ProductsServices> */
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     *
+     * @return BelongsTo<Service, ProductsServices>
+     */
     public function service(): BelongsTo
     {
+        /** @var BelongsTo<Service, ProductsServices> */
         return $this->belongsTo(Service::class);
     }
 }

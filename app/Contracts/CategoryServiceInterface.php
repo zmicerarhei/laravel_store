@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace App\Contracts;
 
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Collection;
 
 interface CategoryServiceInterface
 {
+    /**
+     * Retrieve a category by its slug.
+     *
+     * @param string $slug
+     * @return Category|null
+     */
     public function getCategoryBySlug(string $slug): ?Category;
 }

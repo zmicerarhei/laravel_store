@@ -7,16 +7,15 @@ namespace App\Http\Controllers\Auth;
 use App\Services\AuthService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthUserRequest;
+use App\Http\Requests\SendResetLinkRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdatePassRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -30,7 +29,7 @@ class RegisterController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = $this->authService->createUser($request->all());
+        $user = $this->authService->signUp($request->all());
         Auth::login($user);
 
         return redirect()->route('verification.notice');
@@ -72,10 +71,8 @@ class RegisterController extends Controller
         return view('auth.forgot');
     }
 
-    public function sendResetLink(Request $request): RedirectResponse
+    public function sendResetLink(SendResetLinkRequest $request): RedirectResponse
     {
-        $request->validate(['email' => 'required|email']);
-
         $status = Password::sendResetLink(
             $request->only('email')
         );
@@ -92,17 +89,10 @@ class RegisterController extends Controller
 
     public function updatePassword(UpdatePassRequest $request): RedirectResponse
     {
+        $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
-                $user->forceFill([
-                    'password' => $password
-                ])->setRememberToken(Str::random(60));
-
-                $user->save();
-
-                event(new PasswordReset($user));
-            }
+            $credentials,
+            fn (User $user, string $password) => $this->authService->updateUserPassword($user, $password)
         );
 
         return $status === Password::PASSWORD_RESET
