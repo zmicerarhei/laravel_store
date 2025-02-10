@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BrandSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(ServiceSeeder::class);
-        $this->call(ProductServicesSeeder::class);
+        $this->call(ProductsServicesSeeder::class);
         $this->call(CurrencySeeder::class);
     }
 }

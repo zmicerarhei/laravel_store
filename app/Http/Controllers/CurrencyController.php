@@ -9,15 +9,12 @@ use Illuminate\Http\RedirectResponse;
 
 class CurrencyController extends Controller
 {
-    public function updateRates(CurrencyServiceInterface $currencyService): RedirectResponse
+    public function __construct(private CurrencyServiceInterface $currencyService)
     {
-        $currencyService->updateExchangeRates();
-        return back()->with('message', 'Rates have been updated.');
     }
-
     public function changeCurrency(string $iso, float $rate): RedirectResponse
     {
-        session(['currency_iso' => $iso, 'sale_rate' => $rate]);
+        $this->currencyService->setCurrencyToSession($iso, $rate);
         return redirect()->back();
     }
 }

@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\ProductServices;
+use App\Models\ProductsServices;
 
-class ProductServicesSeeder extends Seeder
+class ProductsServicesSeeder extends Seeder
 {
     public function run(): void
     {
-        $productServices = [
+        $productsServices = [
             ['product_id' => 1, 'service_id' => 1],
             ['product_id' => 1, 'service_id' => 2],
             ['product_id' => 2, 'service_id' => 1],
@@ -60,8 +60,8 @@ class ProductServicesSeeder extends Seeder
             ['product_id' => 20, 'service_id' => 2],
         ];
 
-        foreach ($productServices as $item) {
-            ProductServices::create($item);
+        foreach ($productsServices as $item) {
+            ProductsServices::create($item);
         }
     }
 }

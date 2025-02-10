@@ -25,8 +25,13 @@ class Service extends Model
         'price',
     ];
 
+    /**
+     *
+     * @return BelongsToMany<Service, Product>
+     */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_services');
+        /** @var BelongsToMany<Service, Product> */
+        return $this->belongsToMany(Product::class, 'products_services')->withTimestamps();
     }
 }

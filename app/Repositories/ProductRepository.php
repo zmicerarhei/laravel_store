@@ -4,34 +4,25 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Contracts\ProductRepositoryInterface;
 use App\Filters\ProductFilter;
 use App\Models\Product;
-use App\Models\Category;
-use App\Contracts\RepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductRepository implements RepositoryInterface
+class ProductRepository implements ProductRepositoryInterface
 {
     public function __construct(protected ProductFilter $productFilter)
     {
     }
 
     /**
-     * Get products.
-     *
-     *  @return LengthAwarePaginator<Product>
+     * @return LengthAwarePaginator<Product>
      */
-    public function getProducts(int $perPage, ?string $orderBy, string $category_slug): LengthAwarePaginator
+    public function getProducts(Builder $query, int $perPage): LengthAwarePaginator
     {
-        /**
-         * @var \Illuminate\Database\Eloquent\Builder<\App\Models\Product> $query
-         */
-        $query = $this->buildProductQuery($category_slug);
-        $query->filter($this->productFilter);
-        $this->applySorting($query, $orderBy);
-        $products = $query->with(['brand', 'category'])->paginate($perPage);
-        return $products;
+        return $query->paginate($perPage);
     }
 
     public function createProduct(array $data): Product
@@ -39,41 +30,18 @@ class ProductRepository implements RepositoryInterface
         return Product::create($data);
     }
 
-    public function updateProduct(Product $product, array $data): Product
+    public function updateProduct(Product $product, array $data): bool
     {
-        $product->update($data);
-        return $product;
+        return $product->updateOrFail($data);
     }
 
-    public function deleteProduct(Product $product): void
+    public function deleteProduct(Product $product): ?bool
     {
-        $product->delete();
+        return $product->delete();
     }
 
-    protected function buildProductQuery(string $category_slug): Builder
+    public function getRandomProducts(int $count): Collection
     {
-        $query = Product::query();
-
-        if ($category_slug !== 'all-categories') {
-            $category = Category::where('slug', $category_slug)->firstOrFail();
-            $query->where('category_id', $category->id);
-        }
-
-        return $query;
-    }
-
-    protected function applySorting(Builder $query, ?string $orderBy): void
-    {
-        $orderByConfig = match ($orderBy) {
-            'price-low-high' => ['price', 'asc'],
-            'price-high-low' => ['price', 'desc'],
-            'name-a-z' => ['name', 'asc'],
-            'name-z-a' => ['name', 'desc'],
-            default => null,
-        };
-
-        if ($orderByConfig) {
-            $query->orderBy(...$orderByConfig);
-        }
+        return Product::inRandomOrder()->take($count)->get();
     }
 }

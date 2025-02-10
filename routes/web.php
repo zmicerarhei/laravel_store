@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CurrencyController;
 use Illuminate\Support\Facades\Route;
@@ -46,14 +46,13 @@ Route::get('/products/{category?}', [CatalogController::class, 'index'])->name('
 Route::get('/products/{category}/{product}', [CatalogController::class, 'showProduct'])->name('client.products.showProduct');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function () {
-    Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
-    Route::post('/products', [ProductController::class, 'store'])->name('admin.products.store');
-    Route::post('/products/export', [ProductController::class, 'exportProductsToCsv'])->name('admin.products.export');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('admin.products.delete');
+    Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+    Route::post('/products/export', [AdminProductController::class, 'exportProductsToCsv'])->name('admin.products.export');
+    Route::get('/products/{product}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/products/{product}', [AdminProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/products/{product}', [AdminProductController::class, 'delete'])->name('admin.products.delete');
 });
 
-Route::get('/getRates', [CurrencyController::class, 'updateRates'])->name('admin.currencies.udate');
 Route::get('/currency/{currency}/{rate}', [CurrencyController::class, 'changeCurrency'])->name('client.currencies.change');

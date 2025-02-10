@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\CurrencyServiceInterface;
-use App\Http\Controllers\CurrencyController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Currency;
-use Illuminate\Support\Facades\Cache;
 
 class ViewServiceProvider extends ServiceProvider
 {

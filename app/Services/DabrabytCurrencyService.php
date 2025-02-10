@@ -27,10 +27,27 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         $this->saveExchangeRatesToDatabase($data, config('currency.currencies'));
     }
 
+    public function getCurrencies(): Collection
+    {
+        return Cache::remember('currencies', 600, function () {
+            $this->updateExchangeRates();
+            return Currency::all();
+        });
+    }
+    public function convert(float $price): float
+    {
+        return round($price / $this->currency_rate, 2);
+    }
+
+    public function setCurrencyToSession(string $iso, float $rate): void
+    {
+        session(['currency_iso' => $iso, 'sale_rate' => $rate]);
+    }
+
     /**
-     * Получает курсы валют с API банка.
+     * Get exchange rates from API.
      *
-     * @param string $bankApi URL банка для получения курсов валют.
+     * @param string $bankApi
      *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
@@ -54,7 +71,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             }
 
             $time = $date->format('Y-m-d H:i:s');
-
             $ratesArr = $this->parseRatesFromXMLtoArr($xmlObj);
 
             return [
@@ -63,6 +79,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             ];
         } catch (\Exception $e) {
             Log::error('API request failed: ' . $e->getMessage());
+
             return $this->getDefaultRates();
         }
     }
@@ -71,8 +88,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      * Save exchange rates to database
      *
      * @param array{rates: array<int, array{iso: string, sale: string}>, retrieved_at: string} $data
-     * @param array<string> $currency_types Array of currency ISO codes to process
-     * @throws \Exception When unable to save currency data
+     * @param array<string> $currency_types
      */
     private function saveExchangeRatesToDatabase(array $data, array $currency_types): void
     {
@@ -95,15 +111,10 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         }
     }
 
-    public function getCurrencies(): Collection
-    {
-        return Cache::remember('currencies', 600, function () {
-            $this->updateExchangeRates();
-            return Currency::all();
-        });
-    }
 
     /**
+     *  Parse rates from XML to array
+     *
      * @param \SimpleXMLElement $xmlObj
      * @return array<int, array{iso: string, sale: string}>
      */
@@ -131,6 +142,8 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     }
 
     /**
+     *  Get default exchange rates
+     *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
      *     retrieved_at: string
@@ -142,10 +155,5 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             'rates' => config('currency.fallbackRates'),
             'retrieved_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
-    }
-
-    public function convert(float $price): float
-    {
-        return round($price / $this->currency_rate, 2);
     }
 }

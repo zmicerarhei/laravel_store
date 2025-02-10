@@ -1163,7 +1163,7 @@ section {
     margin-top: 16px;
 }
 
-.product_services {
+.products_services {
     width: 300px;
     padding: 10px;
     margin-top: auto;
@@ -1179,7 +1179,7 @@ section {
     }
 }
 
-.product_services-btn {
+.products_services-btn {
     position: relative;
     margin-top: auto;
     background-color: #007bff;
@@ -1191,11 +1191,11 @@ section {
     transition: background-color 0.3s;
 }
 
-.product_services-btn:focus {
+.products_services-btn:focus {
     outline: none;
 }
 
-.product_services-btn:hover {
+.products_services-btn:hover {
     background-color: #0056b3;
 }
 
