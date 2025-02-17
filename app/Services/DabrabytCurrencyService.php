@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\BankApiClientInterface;
 use App\Contracts\CurrencyServiceInterface;
 use App\Models\Currency;
 use Carbon\Carbon;
@@ -16,14 +17,14 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
 {
     protected float $currency_rate;
 
-    public function __construct()
+    public function __construct(protected BankApiClientInterface $bankApiClient)
     {
         $this->currency_rate = session('sale_rate', 1);
     }
 
     public function updateExchangeRates(): void
     {
-        $data = $this->getExchangeRatesFromAPI(config('currency.api_url'));
+        $data = $this->getExchangeRatesFromAPI();
         $this->saveExchangeRatesToDatabase($data, config('currency.currencies'));
     }
 
@@ -34,6 +35,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             return Currency::all();
         });
     }
+
     public function convert(float $price): float
     {
         return round($price / $this->currency_rate, 2);
@@ -54,10 +56,11 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      *     retrieved_at: string
      * }
      */
-    private function getExchangeRatesFromAPI(string $bankApi): array
+
+    private function getExchangeRatesFromAPI(): array
     {
         try {
-            $xml = Http::get($bankApi)->body();
+            $xml = $this->bankApiClient->fetchExchangeRates();
             $xmlObj = simplexml_load_string($xml);
 
             if (!$xmlObj || !isset($xmlObj->time)) {
@@ -110,7 +113,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
             throw new \Exception("Failed to save currency data: " . $e->getMessage());
         }
     }
-
 
     /**
      *  Parse rates from XML to array

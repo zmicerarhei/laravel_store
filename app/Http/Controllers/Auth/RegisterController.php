@@ -19,9 +19,7 @@ use Illuminate\Http\RedirectResponse;
 
 class RegisterController extends Controller
 {
-    public function __construct(private AuthService $authService)
-    {
-    }
+    public function __construct(private AuthService $authService) {}
     public function create(): View
     {
         return view('auth.register');
@@ -49,6 +47,8 @@ class RegisterController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if ($this->authService->signIn($credentials)) {
+            session()->regenerate();
+
             return redirect()->intended($this->authService->getRedirectDependsOnRole());
         }
 
@@ -92,7 +92,7 @@ class RegisterController extends Controller
         $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
         $status = Password::reset(
             $credentials,
-            fn (User $user, string $password) => $this->authService->updateUserPassword($user, $password)
+            fn(User $user, string $password) => $this->authService->updateUserPassword($user, $password)
         );
 
         return $status === Password::PASSWORD_RESET

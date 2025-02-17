@@ -6,7 +6,6 @@ use App\Models\Product;
 use Database\Seeders\ProductSeeder;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CatalogControllerTest extends TestCase

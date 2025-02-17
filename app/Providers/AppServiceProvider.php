@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\CategoryServiceInterface;
 use App\Contracts\ClientProductServiceInterface;
 use App\Contracts\AdminProductServiceInterface;
-use Illuminate\Support\ServiceProvider;
+use App\Contracts\BankApiClientInterface;
 use App\Repositories\ProductRepository;
+use App\Clients\BankApiClient;
 use App\Services\AdminProductService;
 use App\Services\CategoryService;
 use App\Services\DabrabytCurrencyService;
@@ -29,6 +31,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
         $this->app->bind(ClientProductServiceInterface::class, ClientProductService::class);
         $this->app->bind(AdminProductServiceInterface::class, AdminProductService::class);
+        $this->app->bind(BankApiClientInterface::class, BankApiClient::class);
+
+        $this->app->singleton(BankApiClientInterface::class, function () {
+            $apiUrl = config('currency.api_url');
+
+            return new BankApiClient($apiUrl);
+        });
     }
 
     /**
