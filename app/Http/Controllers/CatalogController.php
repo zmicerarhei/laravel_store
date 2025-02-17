@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class CatalogController extends Controller
 {
     public function __construct(
-        private ClientProductServiceInterface $ClientProductService,
+        private ClientProductServiceInterface $clientProductService,
         private CategoryServiceInterface $categoryservice
     ) {
         //
@@ -21,7 +21,7 @@ class CatalogController extends Controller
 
     public function index(Request $request, string $category_slug = 'all-categories'): View|string
     {
-        $products  = $this->ClientProductService->getPaginatedProducts(
+        $products  = $this->clientProductService->getPaginatedProducts(
             Product::ITEMS_PER_PAGE,
             $request->input('orderBy'),
             $category_slug,
@@ -29,7 +29,7 @@ class CatalogController extends Controller
         );
 
         if ($request->ajax()) {
-            return $this->ClientProductService->generateAjaxResponse($products);
+            return $this->clientProductService->generateAjaxResponse($products);
         }
 
         $category = $this->categoryservice->getCategoryBySlug($category_slug);
@@ -39,7 +39,7 @@ class CatalogController extends Controller
 
     public function showProduct(string $category, Product $product): View
     {
-        $this->ClientProductService->updatePrices($product);
+        $this->clientProductService->updatePrices($product);
         return view('catalog.show', compact('product', 'category'));
     }
 }

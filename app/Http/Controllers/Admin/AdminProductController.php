@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Contracts\AdminProductServiceInterface;
+use App\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Product;
+use App\DTO\ProductData;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AdminProductController extends Controller
 {
-    public function __construct(private AdminProductServiceInterface $adminProductService)
-    {
-    }
+    public function __construct(
+        private AdminProductServiceInterface $adminProductService,
+        private ProductRepositoryInterface $productRepository
+    ) {}
 
     public function index(): View
     {
@@ -32,9 +35,9 @@ class AdminProductController extends Controller
 
     public function store(SaveProductRequest $request): RedirectResponse
     {
-        $data = $request->only('name', 'brand_id', 'category_id', 'description', 'release_date', 'price');
-        $product = $this->adminProductService->addNewProduct($data);
-        $this->adminProductService->syncServicesToProduct($product, $request->input('services') ?? []);
+        $productData = ProductData::from($request->validated())->toArray();
+        $product = $this->productRepository->createProduct($productData);
+        $this->adminProductService->syncServicesToProduct($product, $productData['services'] ?? []);
 
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно создан.');
     }
@@ -47,9 +50,9 @@ class AdminProductController extends Controller
 
     public function update(SaveProductRequest $request, Product $product): RedirectResponse
     {
-        $data = $request->only('name', 'brand_id', 'category_id', 'description', 'release_date', 'price');
-        $this->adminProductService->updateProduct($product, $data);
-        $this->adminProductService->syncServicesToProduct($product, $request->input('services') ?? []);
+        $productData = ProductData::from($request->validated())->toArray();
+        $this->adminProductService->updateProduct($product, $productData);
+        $this->adminProductService->syncServicesToProduct($product, $productData['services'] ?? []);
 
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен.');
     }

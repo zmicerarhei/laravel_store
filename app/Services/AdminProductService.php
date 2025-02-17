@@ -16,7 +16,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AdminProductService implements AdminProductServiceInterface
 {
-    public function __construct(private ProductRepositoryInterface $productRepository) {}
+    public function __construct(private ProductRepositoryInterface $productRepository)
+    {
+    }
     public function getAllProducts(): LengthAwarePaginator
     {
         $query = Product::with(Product::DEFAULT_RELATIONS);
