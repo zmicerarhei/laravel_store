@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Contracts\CategoryServiceInterface;
+use App\Contracts\CategoryRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
@@ -14,12 +14,12 @@ class CatalogController extends Controller
 {
     public function __construct(
         private ClientProductServiceInterface $clientProductService,
-        private CategoryServiceInterface $categoryservice
+        private CategoryRepositoryInterface $categoryRepository
     ) {
         //
     }
 
-    public function index(Request $request, string $category_slug = 'all-categories'): View|string
+    public function index(Request $request, ?string $category_slug = null): View|string
     {
         $products  = $this->clientProductService->getPaginatedProducts(
             Product::ITEMS_PER_PAGE,
@@ -32,7 +32,7 @@ class CatalogController extends Controller
             return $this->clientProductService->generateAjaxResponse($products);
         }
 
-        $category = $this->categoryservice->getCategoryBySlug($category_slug);
+        $category = $this->categoryRepository->getCategoryBySlug($category_slug);
 
         return view('catalog.index', compact('products', 'category'));
     }

@@ -10,7 +10,6 @@ use App\Models\Currency;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class DabrabytCurrencyService implements CurrencyServiceInterface
@@ -39,11 +38,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     public function convert(float $price): float
     {
         return round($price / $this->currency_rate, 2);
-    }
-
-    public function setCurrencyToSession(string $iso, float $rate): void
-    {
-        session(['currency_iso' => $iso, 'sale_rate' => $rate]);
     }
 
     /**
@@ -81,7 +75,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
                 'retrieved_at' => $time,
             ];
         } catch (\Exception $e) {
-            Log::error('API request failed: ' . $e->getMessage());
+            logger()->error('API request failed: ' . $e->getMessage());
 
             return $this->getDefaultRates();
         }

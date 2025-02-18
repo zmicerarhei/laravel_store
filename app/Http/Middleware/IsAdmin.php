@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Contracts\AuthServiceInterface;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\AuthService;
 
 class IsAdmin
 {
+    public function __construct(private AuthServiceInterface $authService) {}
+
     /**
      * Handle an incoming request.
      *
@@ -20,7 +24,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (User::checkAdminRole()) {
+        if ($this->authService->checkAdminRole()) {
             return $next($request);
         }
 

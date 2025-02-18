@@ -22,7 +22,6 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [RegisterController::class, 'updatePassword'])->name('password.update');
 });
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/verify-email', [RegisterController::class, 'verifyEmail'])->middleware('auth')->name('verification.notice');
 
@@ -41,11 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('logout', [RegisterController::class, 'logout'])->name('logout');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('client.home.index');
-Route::get('/products/{category?}', [CatalogController::class, 'index'])->name('client.products.index');
-Route::get('/products/{category}/{product}', [CatalogController::class, 'showProduct'])->name('client.products.showProduct');
-
-Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']], function () {
     Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products.index');
     Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
     Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
@@ -54,5 +49,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function 
     Route::put('/products/{product}', [AdminProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/products/{product}', [AdminProductController::class, 'delete'])->name('admin.products.delete');
 });
+
+Route::get('/', [HomeController::class, 'index'])->name('client.home.index');
+Route::get('/products/{category?}', [CatalogController::class, 'index'])->name('client.products.index');
+Route::get('/products/{category}/{product}', [CatalogController::class, 'showProduct'])->name('client.products.showProduct');
 
 Route::get('/currency/{currency}/{rate}', [CurrencyController::class, 'changeCurrency'])->name('client.currencies.change');

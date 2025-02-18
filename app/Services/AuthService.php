@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\UserRole;
 use App\Contracts\AuthServiceInterface;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -17,6 +18,7 @@ class AuthService implements AuthServiceInterface
     {
         $user = User::create($data);
         event(new Registered($user));
+
         return $user;
     }
 
@@ -46,5 +48,15 @@ class AuthService implements AuthServiceInterface
         ])->setRememberToken(Str::random(60));
         $user->save();
         event(new PasswordReset($user));
+    }
+
+    public static function checkAdminRole(): bool
+    {
+        return Auth::check() && Auth::user()?->role === UserRole::Admin->value;
+    }
+
+    public static function checkUserRole(): bool
+    {
+        return Auth::check() && Auth::user()?->role === UserRole::User->value;
     }
 }

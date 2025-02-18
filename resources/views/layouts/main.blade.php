@@ -79,7 +79,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             @foreach ($currencies as $currency)
                                                 @if ($currency->iso !== session('currency_iso'))
-                                                    <a class="shadow-none dropdown-item shadow-none"
+                                                    <a class="shadow-none dropdown-item"
                                                         href="{{ route('client.currencies.change', [$currency->iso, $currency->sale_rate]) }}">
                                                         {{ $currency->iso }}
                                                     </a>
@@ -115,7 +115,7 @@
                                             @if (Route::has('login'))
                                                 @auth
                                                     <li class="nav-item text-center">
-                                                        <p>{{ Auth::user()->name }}</p>
+                                                        <p>{{ auth()->user()->name }}</p>
                                                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                                                     </li>
                                                 @else

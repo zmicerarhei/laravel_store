@@ -30,13 +30,4 @@ interface CurrencyServiceInterface
      *  @return float
      */
     public function convert(float $price): float;
-
-    /**
-     *  Set currency to session
-     *
-     *  @param string $iso
-     *  @param float $rate
-     *  @return void
-     */
-    public function setCurrencyToSession(string $iso, float $rate): void;
 }

@@ -12,7 +12,6 @@ use App\Filters\ProductFilter;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 class ClientProductService implements ClientProductServiceInterface
 {
@@ -20,13 +19,12 @@ class ClientProductService implements ClientProductServiceInterface
         private ProductRepositoryInterface $productRepository,
         private ProductFilter $productFilter,
         private CurrencyServiceInterface $currencyService
-    ) {
-    }
+    ) {}
 
     public function getPaginatedProducts(
         int $perPage,
         ?string $orderBy,
-        string $category_slug,
+        ?string $category_slug,
         array $relations
     ): LengthAwarePaginator {
         /**
@@ -37,15 +35,12 @@ class ClientProductService implements ClientProductServiceInterface
         $this->applySorting($query, $orderBy);
         $query->with($relations);
         $products = $this->productRepository->getProducts($query, $perPage);
+
         foreach ($products->items() as $product) {
             $product->price = $this->currencyService->convert((float)$product->price);
         };
-        return $products;
-    }
 
-    public function getRandomProducts(int $count): Collection
-    {
-        return Product::inRandomOrder()->take($count)->get();
+        return $products;
     }
 
     public function updatePrices(Product $product): void
@@ -70,11 +65,11 @@ class ClientProductService implements ClientProductServiceInterface
      * @return Builder<Product>
      *
      */
-    private function buildProductQuery(string $category_slug): Builder
+    private function buildProductQuery(?string $category_slug): Builder
     {
         $query = Product::query();
 
-        if ($category_slug !== 'all-categories') {
+        if (isset($category_slug)) {
             $category = Category::where('slug', $category_slug)->firstOrFail();
             $query->where('category_id', $category->id);
         }

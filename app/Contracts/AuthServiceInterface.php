@@ -45,4 +45,18 @@ interface AuthServiceInterface
      * @param string $password
      */
     public function updateUserPassword(User $user, string $password): void;
+
+    /**
+     *  Checks admin role.
+     *
+     * @return bool
+     */
+    public static function checkAdminRole(): bool;
+
+    /**
+     *  Checks user role.
+     *
+     * @return bool
+     */
+    public static function checkUserRole(): bool;
 }

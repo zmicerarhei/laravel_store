@@ -51,7 +51,7 @@ class AdminProductController extends Controller
     public function update(SaveProductRequest $request, Product $product): RedirectResponse
     {
         $productData = ProductData::from($request->validated())->toArray();
-        $this->adminProductService->updateProduct($product, $productData);
+        $this->productRepository->updateProduct($product, $productData);
         $this->adminProductService->syncServicesToProduct($product, $productData['services'] ?? []);
 
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно обновлен.');
@@ -59,7 +59,7 @@ class AdminProductController extends Controller
 
     public function delete(Product $product): RedirectResponse
     {
-        $this->adminProductService->deleteProduct($product);
+        $this->productRepository->deleteProduct($product);
         return redirect()->route('admin.products.index')->with('success', 'Продукт успешно удален.');
     }
 

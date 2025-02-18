@@ -8,5 +8,5 @@ use App\Models\Category;
 
 interface CategoryRepositoryInterface
 {
-    public function getCategoryBySlug(string $slug): Category;
+    public function getCategoryBySlug(?string $slug): ?Category;
 }
