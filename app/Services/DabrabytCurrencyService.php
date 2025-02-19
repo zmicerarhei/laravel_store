@@ -47,7 +47,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
-     *     retrieved_at: string
      * }
      */
 
@@ -72,7 +71,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
 
             return [
                 'rates' => $ratesArr,
-                'retrieved_at' => $time,
             ];
         } catch (\Exception $e) {
             logger()->error('API request failed: ' . $e->getMessage());
@@ -84,7 +82,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
     /**
      * Save exchange rates to database
      *
-     * @param array{rates: array<int, array{iso: string, sale: string}>, retrieved_at: string} $data
+     * @param array{rates: array<int, array{iso: string, sale: string}>} $data
      * @param array<string> $currency_types
      */
     private function saveExchangeRatesToDatabase(array $data, array $currency_types): void
@@ -97,7 +95,6 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
                         ['iso' => $iso],
                         [
                             'sale_rate' => (float)$rate['sale'],
-                            'retrieved_at' => $data['retrieved_at'],
                             'is_main' => 0
                         ]
                     );
@@ -142,14 +139,12 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
      *
      * @return array{
      *     rates: array<int, array{iso: string, sale: string}>,
-     *     retrieved_at: string
      * }
      */
     private function getDefaultRates(): array
     {
         return [
             'rates' => config('currency.fallbackRates'),
-            'retrieved_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ];
     }
 }

@@ -55,11 +55,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // if (!(session()->has('currency_iso'))) {
-        //     session()->put('currency_iso', config('currency.default.iso'));
-        //     session()->put('sale_rate', config('currency.default.sale_rate'));
-        // }
-
         Paginator::useBootstrapFour();
     }
 }
