@@ -15,16 +15,14 @@ class CurrencyRepository implements CurrencyRepositoryInterface
         return Currency::all();
     }
 
-    public function save(array $rates): void
+    public function updateByIso(array $rate, string $iso): void
     {
-        foreach ($rates as $rate) {
-            Currency::updateOrCreate(
-                ['iso' => $rate['iso']],
-                [
-                    'sale_rate' => $rate['sale'],
-                    'is_main' => 0,
-                ]
-            );
-        }
+        Currency::updateOrCreate(
+            ['iso' => $iso],
+            [
+                'sale_rate' => $rate['sale'],
+                'is_main' => 0,
+            ]
+        );
     }
 }
