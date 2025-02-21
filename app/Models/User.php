@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\UserRole;
 use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 
@@ -60,15 +58,5 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public static function checkAdminRole(): bool
-    {
-        return Auth::check() && Auth::user()?->role === UserRole::Admin->value;
-    }
-
-    public static function checkUserRole(): bool
-    {
-        return Auth::check() && Auth::user()?->role === UserRole::User->value;
     }
 }

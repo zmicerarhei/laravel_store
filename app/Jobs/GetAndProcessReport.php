@@ -9,7 +9,6 @@ use App\Notifications\ReportSavedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class GetAndProcessReport implements ShouldQueue
 {
@@ -33,9 +32,9 @@ class GetAndProcessReport implements ShouldQueue
             Storage::put($fileName, $this->reportFile);
             $userName = $this->user->name;
             $this->user->notify(new ReportSavedNotification($fileName));
-            Log::info("Файл $fileName успешно загружен админом $userName");
+            logger()->info("File $fileName was successfully saved by $userName");
         } catch (\Exception $e) {
-            Log::error("Ошибка при сохранении файла: " . $e->getMessage());
+            logger()->error("Failed to save file: " . $e->getMessage());
         }
     }
 }

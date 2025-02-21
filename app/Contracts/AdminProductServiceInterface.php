@@ -31,35 +31,6 @@ interface AdminProductServiceInterface
     public function getDataForEditView(Product $product): array;
 
     /**
-     * Adds a new product.
-     * @param array<string, mixed> $data
-     * @return Product
-     */
-    public function addNewProduct(array $data): Product;
-
-    /**
-     * Updates a product.
-     * @param Product $product
-     * @param array<string, mixed> $data
-     * @return bool
-     */
-    public function updateProduct(Product $product, array $data): bool;
-
-    /**
-     * Deletes a product.
-     * @param Product $product
-     * @return bool|null
-     */
-    public function deleteProduct(Product $product): ?bool;
-
-    /**
-     * Syncs services to a product.
-     * @param Product $product
-     * @param array<int, int> $services
-     */
-    public function syncServicesToProduct(Product $product, array $services): void;
-
-    /**
      * Exports products to CSV.
      * @param User $user
      */

@@ -16,7 +16,6 @@ class CurrencySeeder extends Seeder
         Currency::create([
             'iso' => 'BYN',
             'sale_rate' => 1.0,
-            'retrieved_at' => now(),
             'is_main' => 1
         ]);
     }

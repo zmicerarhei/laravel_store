@@ -27,6 +27,7 @@ class SaveProductRequest extends FormRequest
             'description'   => ['required', 'string', 'min:10'],
             'release_date'  => ['required', 'date', 'before_or_equal:today'],
             'price'         => ['required', 'numeric', 'min:0.01'],
+            'services'      => ['array'],
         ];
     }
 }

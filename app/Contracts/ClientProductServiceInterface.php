@@ -6,7 +6,6 @@ namespace App\Contracts;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Collection;
 
 interface ClientProductServiceInterface
 {
@@ -22,24 +21,9 @@ interface ClientProductServiceInterface
     public function getPaginatedProducts(
         int $perPage,
         ?string $orderBy,
-        string $category_slug,
+        ?string $category_slug,
         array $relations,
     ): LengthAwarePaginator;
-
-    /**
-     * Get random products.
-     *
-     * @param int $count
-     * @return Collection<int, Product>
-     */
-    public function getRandomProducts(int $count): Collection;
-
-    /**
-     * Update prices according to currency.
-     *
-     * @param Product $product
-     */
-    public function updatePrices(Product $product): void;
 
     /**
      * Generate ajax response.

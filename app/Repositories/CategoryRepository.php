@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Contracts\CategoryRepositoryInterface;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection;
 
-class CategoryRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
     public function __construct()
     {
+    }
+
+    /**
+     *  Retrieve all categories.
+     *
+     * @return Collection<int, Category>
+     */
+    public function getAllCategories(): Collection
+    {
+        return Category::all();
     }
 
     /**
@@ -18,8 +30,8 @@ class CategoryRepository
      * @param string $slug The slug of the category.
      * @return Category The category instance matching the slug.
      */
-    public function getCategoryBySlug($slug)
+    public function getCategoryBySlug(?string $slug): ?Category
     {
-        return Category::where('slug', $slug)->firstOrFail();
+        return Category::where('slug', $slug)->first();
     }
 }

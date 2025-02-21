@@ -6,15 +6,15 @@ namespace App\Contracts;
 
 use App\Models\User;
 
-interface AuthServiceInterface
+interface RegisterServiceInterface
 {
     /**
      *  Create a new user instance after a valid registration.
      *
      * @param array<string, string> $data
-     * @return User
+     * @return void
      */
-    public function signUp(array $data): User;
+    public function signUp(array $data): void;
 
     /**
      *  Signs in a user.
@@ -45,4 +45,34 @@ interface AuthServiceInterface
      * @param string $password
      */
     public function updateUserPassword(User $user, string $password): void;
+
+    /**
+     *  Checks admin role.
+     *
+     * @return bool
+     */
+    public function checkAdminRole(): bool;
+
+    /**
+     *  Checks user role.
+     *
+     * @return bool
+     */
+    public function checkUserRole(): bool;
+
+    /**
+     *  Sends password reset link.
+     *
+     * @param string $email
+     * @return string
+     */
+    public function sendResetLink(string $email): string;
+
+    /**
+     *  Resets password.
+     *
+     * @param array<string, string> $credentials
+     * @return string
+     */
+    public function resetPassword(array $credentials): string;
 }

@@ -30,7 +30,7 @@
         </div>
     </header>
 
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-5 mb-5">
         @yield('content')
     </div>
 

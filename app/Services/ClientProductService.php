@@ -4,29 +4,27 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
 use App\Filters\ProductFilter;
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 class ClientProductService implements ClientProductServiceInterface
 {
     public function __construct(
         private ProductRepositoryInterface $productRepository,
+        private CategoryRepositoryInterface $categoryRepository,
         private ProductFilter $productFilter,
-        private CurrencyServiceInterface $currencyService
     ) {
     }
 
     public function getPaginatedProducts(
         int $perPage,
         ?string $orderBy,
-        string $category_slug,
+        ?string $category_slug,
         array $relations
     ): LengthAwarePaginator {
         /**
@@ -37,25 +35,8 @@ class ClientProductService implements ClientProductServiceInterface
         $this->applySorting($query, $orderBy);
         $query->with($relations);
         $products = $this->productRepository->getProducts($query, $perPage);
-        foreach ($products->items() as $product) {
-            $product->price = $this->currencyService->convert((float)$product->price);
-        };
+
         return $products;
-    }
-
-    public function getRandomProducts(int $count): Collection
-    {
-        return Product::inRandomOrder()->take($count)->get();
-    }
-
-    public function updatePrices(Product $product): void
-    {
-        foreach ($product->services as $service) {
-            /** @var \App\Models\Service $service */
-            $service->price = $this->currencyService->convert((float)$service->price);
-        }
-
-        $product->price = $this->currencyService->convert((float)$product->price);
     }
 
     public function generateAjaxResponse(LengthawarePaginator $products): string
@@ -70,13 +51,13 @@ class ClientProductService implements ClientProductServiceInterface
      * @return Builder<Product>
      *
      */
-    private function buildProductQuery(string $category_slug): Builder
+    private function buildProductQuery(?string $category_slug): Builder
     {
         $query = Product::query();
 
-        if ($category_slug !== 'all-categories') {
-            $category = Category::where('slug', $category_slug)->firstOrFail();
-            $query->where('category_id', $category->id);
+        if (isset($category_slug)) {
+            $category = $this->categoryRepository->getCategoryBySlug($category_slug);
+            $query->where('category_id', $category?->id);
         }
 
         return $query;

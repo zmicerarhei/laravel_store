@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
-use App\Services\AuthService;
+use App\Contracts\RegisterServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthUserRequest;
 use App\Http\Requests\SendResetLinkRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdatePassRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\RedirectResponse;
 
 class RegisterController extends Controller
 {
-    public function __construct(private AuthService $authService)
-    {
+    public function __construct(
+        private RegisterServiceInterface $registerService,
+    ) {
     }
     public function create(): View
     {
@@ -29,8 +28,7 @@ class RegisterController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = $this->authService->signUp($request->all());
-        Auth::login($user);
+        $this->registerService->signUp($request->validated());
 
         return redirect()->route('verification.notice');
     }
@@ -48,8 +46,10 @@ class RegisterController extends Controller
     public function authenticate(AuthUserRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
-        if ($this->authService->signIn($credentials)) {
-            return redirect()->intended($this->authService->getRedirectDependsOnRole());
+        if ($this->registerService->signIn($credentials)) {
+            session()->regenerate();
+
+            return redirect()->intended($this->registerService->getRedirectDependsOnRole());
         }
 
         return redirect()->intended('/login')->withErrors([
@@ -59,7 +59,7 @@ class RegisterController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
-        $this->authService->logOut();
+        $this->registerService->logOut();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -73,13 +73,11 @@ class RegisterController extends Controller
 
     public function sendResetLink(SendResetLinkRequest $request): RedirectResponse
     {
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = $this->registerService->sendResetLink($request->email);
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['success' => __($status)])
-            : back()->withErrors(['error' => __($status)]);
+        return $status === PasswordBroker::RESET_LINK_SENT
+            ? back()->with(['success' => $status])
+            : back()->withErrors(['error' => $status]);
     }
 
     public function showResetForm(string $token): View
@@ -90,12 +88,9 @@ class RegisterController extends Controller
     public function updatePassword(UpdatePassRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
-        $status = Password::reset(
-            $credentials,
-            fn (User $user, string $password) => $this->authService->updateUserPassword($user, $password)
-        );
+        $status = $this->registerService->resetPassword($credentials);
 
-        return $status === Password::PASSWORD_RESET
+        return $status === PasswordBroker::PASSWORD_RESET
             ? redirect()->route('login')->with('success', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }

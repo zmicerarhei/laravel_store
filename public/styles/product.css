@@ -41,7 +41,6 @@ body {
     font-size: 14px;
     font-weight: 400;
     background: #ffffff;
-    color: #a5a5a5;
 }
 
 div {
@@ -500,7 +499,6 @@ section {
 
 .search {
     display: inline-block;
-    margin-left: 51px;
     cursor: pointer;
     vertical-align: sub;
     -webkit-transform: translateY(-1px);

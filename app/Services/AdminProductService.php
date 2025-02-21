@@ -9,54 +9,44 @@ use App\Contracts\ProductRepositoryInterface;
 use App\Jobs\ExportAndSendReport;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Brand;
-use App\Models\Service;
+use App\Repositories\BrandRepository;
+use App\Repositories\CategoryRepository;
+use App\Repositories\ServiceRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AdminProductService implements AdminProductServiceInterface
 {
-    public function __construct(private ProductRepositoryInterface $productRepository) {}
+    public function __construct(
+        private ProductRepositoryInterface $productRepository,
+        private CategoryRepository $categoryRepository,
+        private BrandRepository $brandRepository,
+        private ServiceRepository $serviceRepository
+    ) {
+    }
     public function getAllProducts(): LengthAwarePaginator
     {
         $query = Product::with(Product::DEFAULT_RELATIONS);
-        return $this->productRepository->getProducts($query, 8);
+
+        return $this->productRepository->getProducts($query, Product::ITEMS_PER_PAGE);
     }
     public function getDataForCreateView(): array
     {
-        $brands = Brand::all();
-        $categories = Category::all();
-        $services = Service::all();
+        $services = $this->serviceRepository->getAllServices();
+        $brands = $this->brandRepository->getAllBrands();
+        $categories = $this->categoryRepository->getAllCategories();
+
         return compact('services', 'brands', 'categories');
     }
 
     public function getDataForEditView(Product $product): array
     {
-        $services = Service::all();
-        $brands = Brand::all();
-        $categories = Category::all();
-        $product->load('services');
+        $services = $this->serviceRepository->getAllServices();
+        $brands = $this->brandRepository->getAllBrands();
+        $categories = $this->categoryRepository->getAllCategories();
+        $product = $this->productRepository->getProductWithRelations($product->id, ['services']);
         $selectedServices = $product->services->pluck('id')->toArray();
+
         return compact('services', 'brands', 'categories', 'selectedServices', 'product');
-    }
-    public function addNewProduct(array $data): Product
-    {
-        return $this->productRepository->createProduct($data);
-    }
-
-    public function updateProduct(Product $product, array $data): bool
-    {
-        return $this->productRepository->updateProduct($product, $data);
-    }
-
-    public function deleteProduct(Product $product): ?bool
-    {
-        return $this->productRepository->deleteProduct($product);
-    }
-
-    public function syncServicesToProduct(Product $product, array $services): void
-    {
-        $product->services()->sync($services);
     }
 
     public function exportProductsToCsv(User $user): void

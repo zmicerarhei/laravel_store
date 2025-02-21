@@ -42,11 +42,12 @@
                             @foreach ($product->services as $service)
                                 <div class="product_service">
                                     <input id="service_{{ $service->id }}" type="checkbox"
-                                        class="regular_checkbox service_checkbox" data-price="{{ $service->price }}"
+                                        class="regular_checkbox service_checkbox"
+                                        data-price="{{ $service->converted_price }}"
                                         @if ($service->name === 'Гарантийное обслуживание') checked disabled @endif>
                                     <label for="service_{{ $service->id }}"><img src="/images/check.png"
                                             alt=""></label>
-                                    <span class="checkbox_title">{{ $service->name }}: {{ $service->price }}
+                                    <span class="checkbox_title">{{ $service->name }}: {{ $service->converted_price }}
                                         {{ session('currency_iso') }}</span>
                                 </div>
                             @endforeach

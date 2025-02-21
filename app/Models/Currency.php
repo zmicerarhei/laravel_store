@@ -11,13 +11,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property string $iso
  * @property float $sale_rate
- * @property string $retrieved_at
  */
 class Currency extends Model
 {
     protected $fillable = [
         'iso',
         'sale_rate',
-        'retrieved_at',
     ];
 }

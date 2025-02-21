@@ -44,4 +44,14 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::inRandomOrder()->take($count)->get();
     }
+
+    public function getProductWithRelations(int $id, array $relations): Product
+    {
+        return Product::with($relations)->findOrFail($id);
+    }
+
+    public function syncProductToServices(Product $product, array $services): void
+    {
+        $product->services()->sync($services);
+    }
 }

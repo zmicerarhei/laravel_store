@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Service extends Model
 {
+    use HasConvertedPrice;
+
     protected $fillable = [
         'name',
         'description',
