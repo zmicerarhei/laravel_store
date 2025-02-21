@@ -26,13 +26,6 @@ interface ClientProductServiceInterface
     ): LengthAwarePaginator;
 
     /**
-     * Update prices according to currency.
-     *
-     * @param Product $product
-     */
-    public function updatePrices(Product $product): void;
-
-    /**
      * Generate ajax response.
      *
      * @param LengthAwarePaginator<Product> $products

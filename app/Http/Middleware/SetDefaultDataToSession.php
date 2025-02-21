@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetDefaultDataToSession
 {
-    public function __construct(private string $iso, private float $sale_rate) {}
+    public function __construct(private string $iso, private float $sale_rate)
+    {
+    }
 
     /**
      * Handle an incoming request.

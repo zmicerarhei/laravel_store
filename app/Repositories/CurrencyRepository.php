@@ -10,6 +10,10 @@ use App\Contracts\CurrencyRepositoryInterface;
 
 class CurrencyRepository implements CurrencyRepositoryInterface
 {
+    /**
+     * @return Collection<int, Currency>
+     *
+     */
     public function all(): Collection
     {
         return Currency::all();

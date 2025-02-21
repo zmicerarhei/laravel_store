@@ -10,8 +10,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
+    /**
+     *  Retrieve all categories.
+     *
+     * @return Collection<int, Category>
+     */
     public function getAllCategories(): Collection
     {
         return Category::all();

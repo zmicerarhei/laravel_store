@@ -8,6 +8,9 @@ use App\Contracts\ServiceRepositoryInterface;
 
 class ServiceRepository implements ServiceRepositoryInterface
 {
+    /**
+     * @return Collection<int, Service>
+     */
     public function getAllServices(): Collection
     {
         return Service::all();

@@ -10,8 +10,9 @@ use App\Contracts\BrandRepositoryInterface;
 
 class BrandRepository implements BrandRepositoryInterface
 {
-    public function __construct() {}
-
+    /**
+     * @return Collection<int, Brand>
+     */
     public function getAllBrands(): Collection
     {
         return Brand::all();

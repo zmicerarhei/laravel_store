@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Filterable\Interfaces\Filterable as FilterableInterface;
+use App\Traits\HasConvertedPrice;
 use Filterable\Traits\Filterable as TraitsFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Product extends Model implements FilterableInterface
 {
     use TraitsFilterable;
+    use HasConvertedPrice;
 
     /**
      * @use HasFactory<\Database\Factories\ProductFactory>

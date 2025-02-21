@@ -11,7 +11,9 @@ class BankApiClient implements BankApiClientInterface
 {
     protected string $baseUrl;
 
-    public function __construct(private string $url) {}
+    public function __construct(private string $url)
+    {
+    }
 
     public function fetchExchangeRates(): string
     {

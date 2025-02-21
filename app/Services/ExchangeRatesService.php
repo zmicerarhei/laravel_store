@@ -9,15 +9,14 @@ use App\Contracts\ExchangeRatesServiceInterface;
 
 class ExchangeRatesService implements ExchangeRatesServiceInterface
 {
-    public function __construct(protected BankApiClientInterface $bankApiClient) {}
+    public function __construct(protected BankApiClientInterface $bankApiClient)
+    {
+    }
 
     /**
      * Get exchange rates from API.
      *
-     * @return array{
-     *     rates: array<int, array{iso: string, sale: string}>,
-     *     retrieved_at: string
-     * }
+     * @return array{rates: array<int, array{iso: string, sale: string}>}
      */
     public function fetchExchangeRates(): array
     {

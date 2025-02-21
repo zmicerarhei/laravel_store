@@ -51,4 +51,22 @@ interface ProductRepositoryInterface
      * @return Collection<int, Product>
      */
     public function getRandomProducts(int $count): Collection;
+
+    /**
+     * Get product with relations.
+     *
+     * @param int $id
+     * @param array<string> $relations
+     * @return Product
+     */
+    public function getProductWithRelations(int $id, array $relations): Product;
+
+    /**
+     * Sync product to services.
+     *
+     * @param Product $product
+     * @param array<int> $services
+     * @return void
+     */
+    public function syncProductToServices(Product $product, array $services): void;
 }

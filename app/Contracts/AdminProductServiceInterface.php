@@ -31,13 +31,6 @@ interface AdminProductServiceInterface
     public function getDataForEditView(Product $product): array;
 
     /**
-     * Syncs services to a product.
-     * @param Product $product
-     * @param array<int, int> $services
-     */
-    public function syncServicesToProduct(Product $product, array $services): void;
-
-    /**
      * Exports products to CSV.
      * @param User $user
      */

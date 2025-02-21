@@ -39,7 +39,6 @@ class CatalogController extends Controller
 
     public function showProduct(string $category, Product $product): View
     {
-        $this->clientProductService->updatePrices($product);
         return view('catalog.show', compact('product', 'category'));
     }
 }

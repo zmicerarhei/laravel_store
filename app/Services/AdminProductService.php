@@ -9,9 +9,6 @@ use App\Contracts\ProductRepositoryInterface;
 use App\Jobs\ExportAndSendReport;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Brand;
-use App\Models\Service;
 use App\Repositories\BrandRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ServiceRepository;
@@ -24,12 +21,13 @@ class AdminProductService implements AdminProductServiceInterface
         private CategoryRepository $categoryRepository,
         private BrandRepository $brandRepository,
         private ServiceRepository $serviceRepository
-    ) {}
+    ) {
+    }
     public function getAllProducts(): LengthAwarePaginator
     {
         $query = Product::with(Product::DEFAULT_RELATIONS);
 
-        return $this->productRepository->getProducts($query, 8);
+        return $this->productRepository->getProducts($query, Product::ITEMS_PER_PAGE);
     }
     public function getDataForCreateView(): array
     {
@@ -45,15 +43,10 @@ class AdminProductService implements AdminProductServiceInterface
         $services = $this->serviceRepository->getAllServices();
         $brands = $this->brandRepository->getAllBrands();
         $categories = $this->categoryRepository->getAllCategories();
-        $product->load('services');
+        $product = $this->productRepository->getProductWithRelations($product->id, ['services']);
         $selectedServices = $product->services->pluck('id')->toArray();
 
         return compact('services', 'brands', 'categories', 'selectedServices', 'product');
-    }
-
-    public function syncServicesToProduct(Product $product, array $services): void
-    {
-        $product->services()->sync($services);
     }
 
     public function exportProductsToCsv(User $user): void

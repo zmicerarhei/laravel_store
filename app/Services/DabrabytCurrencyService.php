@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Contracts\BankApiClientInterface;
 use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\CurrencyRepositoryInterface;
 use App\Contracts\ExchangeRatesServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class DabrabytCurrencyService implements CurrencyServiceInterface
 {
-
+    /**
+     * @param array<int, array{iso: string, sale: string}> $fallbackRates
+     * @param array<string> $currency_types
+     */
     public function __construct(
-        private BankApiClientInterface $bankApiClient,
         private ExchangeRatesServiceInterface $exchangeRatesService,
         private CurrencyRepositoryInterface $currencyRepository,
         private array $currency_types,
         private array $fallbackRates,
-    ) {}
+    ) {
+    }
 
     public function updateExchangeRates(): void
     {
@@ -41,17 +42,10 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
 
     public function getCurrencies(): Collection
     {
-        return Cache::remember('currencies', 600, function () {
+        return cache()->remember('currencies', 600, function () {
             $this->updateExchangeRates();
             return $this->currencyRepository->all();
         });
-    }
-
-    public function convert(float $price): float
-    {
-        $currency_rate = session('sale_rate', 1);
-
-        return round($price / $currency_rate, 2);
     }
 
     /**
