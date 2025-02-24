@@ -4,24 +4,47 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Contracts\ProductFilterInterface;
 use App\Contracts\ProductRepositoryInterface;
-use App\Filters\ProductFilter;
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function __construct(protected ProductFilter $productFilter)
-    {
-    }
+    public function __construct() {}
 
-    /**
-     * @return LengthAwarePaginator<Product>
-     */
-    public function getProducts(Builder $query, int $perPage): LengthAwarePaginator
-    {
+    public function getProductsWithFilters(
+        ?string $categorySlug,
+        ?string $orderBy,
+        array $relations,
+        int $perPage,
+        ProductFilterInterface $productFilter
+    ): LengthAwarePaginator {
+        $query = Product::query();
+
+        if ($categorySlug) {
+            $query->whereHas('category', function ($q) use ($categorySlug) {
+                $q->where('slug', $categorySlug);
+            });
+        }
+
+        $query->filter($productFilter);
+
+        $orderByConfig = match ($orderBy) {
+            'price-low-high' => ['price', 'asc'],
+            'price-high-low' => ['price', 'desc'],
+            'name-a-z' => ['name', 'asc'],
+            'name-z-a' => ['name', 'desc'],
+            default => null,
+        };
+
+        if ($orderByConfig) {
+            $query->orderBy(...$orderByConfig);
+        }
+
+        $query->with($relations);
+
         return $query->paginate($perPage);
     }
 
@@ -53,5 +76,11 @@ class ProductRepository implements ProductRepositoryInterface
     public function syncProductToServices(Product $product, array $services): void
     {
         $product->services()->sync($services);
+    }
+
+
+    public function getAllProducts($columns = ['*']): Collection
+    {
+        return Product::all($columns);
     }
 }

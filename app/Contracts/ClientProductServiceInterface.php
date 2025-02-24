@@ -12,17 +12,17 @@ interface ClientProductServiceInterface
     /**
      * Get paginated products.
      *
-     * @param int $perPage
+     * @param string $categorySlug
      * @param string|null $orderBy
-     * @param string $category_slug
      * @param array<string> $relations
+     * @param int $perPage
      * @return LengthAwarePaginator<Product>
      */
     public function getPaginatedProducts(
-        int $perPage,
+        ?string $categorySlug,
         ?string $orderBy,
-        ?string $category_slug,
         array $relations,
+        int $perPage,
     ): LengthAwarePaginator;
 
     /**

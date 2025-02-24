@@ -16,19 +16,27 @@ use App\Contracts\ClientProductServiceInterface;
 use App\Contracts\AdminProductServiceInterface;
 use App\Contracts\RegisterServiceInterface;
 use App\Contracts\BankApiClientInterface;
-use App\Clients\BankApiClient;
 use App\Contracts\ExchangeRatesServiceInterface;
+use App\Contracts\ProductFilterInterface;
 use App\Contracts\UserRepositoryInterface;
+use App\Clients\BankApiClient;
+use App\Contracts\BrandRepositoryInterface;
+use App\Contracts\CsvWriterInterface;
+use App\Filters\ProductFilter;
 use App\Services\AdminProductService;
 use App\Services\DabrabytCurrencyService;
 use App\Services\ClientProductService;
 use App\Services\RegisterService;
 use App\Repositories\CategoryRepository;
+use App\Repositories\BrandRepository;
 use App\Repositories\CurrencyRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use App\Http\Middleware\SetDefaultDataToSession;
 use App\Services\ExchangeRatesService;
+use App\Utils\CarbonClock;
+use App\Utils\CsvWriterAdapter;
+use Psr\Clock\ClockInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,9 +45,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(BankApiClientInterface::class, BankApiClient::class);
+        $this->app->bind(ProductFilterInterface::class, ProductFilter::class);
         $this->app->bind(CurrencyRepositoryInterface::class, CurrencyRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(BrandRepositoryInterface::class, BrandRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(CurrencyServiceInterface::class, DabrabytCurrencyService::class);
@@ -71,6 +80,13 @@ class AppServiceProvider extends ServiceProvider
                 config('currency.currencies'),
                 config('currency.fallbackRates'),
             );
+        });
+        $this->app->singleton(ClockInterface::class, function ($app) {
+            return new CarbonClock();
+        });
+
+        $this->app->singleton(CsvWriterInterface::class, function ($app) {
+            return new CsvWriterAdapter();
         });
     }
 

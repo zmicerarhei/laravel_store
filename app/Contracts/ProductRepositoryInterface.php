@@ -6,18 +6,34 @@ namespace App\Contracts;
 
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 interface ProductRepositoryInterface
 {
     /**
-     * Get all products.
-     *  @param Builder<Product> $query
-     *  @param int $perPage
-     *  @return LengthAwarePaginator<Product>
+     * Get sorted and filtered products taking into account pagination.
+     *
+     * @param string|null $categorySlug
+     * @param string|null $orderBy
+     * @param array<string> $relations
+     * @param int $perPage
+     * @return LengthAwarePaginator<Product>
      */
-    public function getProducts(Builder $query, int $perPage): LengthAwarePaginator;
+    public function getProductsWithFilters(
+        ?string $categorySlug,
+        ?string $orderBy,
+        array $relations,
+        int $perPage,
+        ProductFilterInterface $productFilter,
+    ): LengthAwarePaginator;
+
+    /**
+     * Get all products.
+     *
+     * @param array<string> $columns
+     * @return Collection<int, Product>
+     */
+    public function getAllProducts($columns = ['*']): Collection;
 
     /**
      * Create product.

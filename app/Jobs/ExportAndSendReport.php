@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Models\Product;
+use App\Contracts\CsvWriterInterface;
+use App\Contracts\ProductRepositoryInterface;
 use App\Models\User;
+use Illuminate\Contracts\Queue\Queue as QueueInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use League\Csv\Writer;
-use Illuminate\Support\Facades\Queue;
 
 class ExportAndSendReport implements ShouldQueue
 {
@@ -18,7 +18,7 @@ class ExportAndSendReport implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private User $user)
+    public function __construct(private User $user, private array $exportFields)
     {
         //
     }
@@ -26,13 +26,14 @@ class ExportAndSendReport implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
-    {
-        $fields = ['id', 'name', 'description', 'release_date', 'price'];
-        $products = Product::all($fields)->toArray();
-        $csv = Writer::createFromString();
-        $csv->insertOne($fields);
-        $csv->insertAll($products);
-        Queue::push(new GetAndProcessReport($csv->toString(), $this->user));
+    public function handle(
+        ProductRepositoryInterface $productRepository,
+        CsvWriterInterface $csvWriter,
+        QueueInterface $queue
+    ): void {
+        $products = $productRepository->getAllProducts($this->exportFields)->toArray();
+        $csvWriter->insertOne($this->exportFields);
+        $csvWriter->insertAll($products);
+        $queue->push(new GetAndProcessReport($csvWriter->toString(), $this->user));
     }
 }

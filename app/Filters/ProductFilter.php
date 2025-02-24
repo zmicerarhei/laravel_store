@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filters;
 
+use App\Contracts\ProductFilterInterface;
 use App\Models\Product;
 use Filterable\Filter;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductFilter extends Filter
+class ProductFilter extends Filter implements ProductFilterInterface
 {
     /**
      * Registered filters to operate upon.
