@@ -12,8 +12,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
+    /**
+     * Retrieves products with applied filters, ordering, and relations.
+     *
+     * @return LengthAwarePaginator<Product>
+     */
     public function getProductsWithFilters(
         ?string $categorySlug,
         ?string $orderBy,
@@ -82,5 +89,10 @@ class ProductRepository implements ProductRepositoryInterface
     public function getAllProducts($columns = ['*']): Collection
     {
         return Product::all($columns);
+    }
+
+    public function getServicesByProductId(int $id): ?Collection
+    {
+        return Product::find($id)?->services;
     }
 }

@@ -16,7 +16,7 @@ class GetAndProcessReport implements ShouldQueue
 {
     use Queueable;
 
-    private const FILE_EXTANTION = 'csv';
+    private const FILE_EXTANTION = '.csv';
     private const BASE_FILE_NAME = 'products_report_';
 
     /**
@@ -36,7 +36,7 @@ class GetAndProcessReport implements ShouldQueue
         LoggerInterface $logger
     ): void {
         try {
-            $fileName = self::BASE_FILE_NAME . $clock->now() . self::FILE_EXTANTION;
+            $fileName = self::BASE_FILE_NAME . $clock->now()->getTimestamp() . self::FILE_EXTANTION;
             $filesystem->put($fileName, $this->reportFile);
             $userName = $this->user->name;
             $this->user->notify(new ReportSavedNotification($fileName));

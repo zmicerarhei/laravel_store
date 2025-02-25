@@ -17,6 +17,9 @@ class ExportAndSendReport implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param User $user
+     * @param array<string> $exportFields
      */
     public function __construct(private User $user, private array $exportFields)
     {

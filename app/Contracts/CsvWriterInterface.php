@@ -7,17 +7,23 @@ namespace App\Contracts;
 interface CsvWriterInterface
 {
     /**
-     * Вставляет одну строку данных в CSV.
+     * Inserts one row into the CSV.
+     *
+     * @param array<string|int, mixed> $row
+     * @return void
      */
     public function insertOne(array $row): void;
 
     /**
-     * Вставляет массив строк в CSV.
+     * Inserts multiple rows into the CSV.
+     *
+     * @param array<array<string|int, mixed>> $rows
+     * @return void
      */
     public function insertAll(array $rows): void;
 
     /**
-     * Возвращает содержимое CSV в виде строки.
+     * Returns the CSV as a string.
      */
     public function toString(): string;
 }

@@ -23,7 +23,8 @@ class AdminProductService implements AdminProductServiceInterface
         private BrandRepositoryInterface $brandRepository,
         private ServiceRepository $serviceRepository,
         private ProductFilterInterface $productFilter,
-    ) {}
+    ) {
+    }
     public function getAllProducts(): LengthAwarePaginator
     {
         return $this->productRepository->getProductsWithFilters(
@@ -49,7 +50,7 @@ class AdminProductService implements AdminProductServiceInterface
         $brands = $this->brandRepository->getAllBrands();
         $categories = $this->categoryRepository->getAllCategories();
         $product = $this->productRepository->getProductWithRelations($product->id, ['services']);
-        $selectedServices = $product->services->pluck('id')->toArray();
+        $selectedServices = $this->productRepository->getServicesByProductId($product->id)?->modelKeys();
 
         return compact('services', 'brands', 'categories', 'selectedServices', 'product');
     }

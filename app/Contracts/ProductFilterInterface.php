@@ -6,4 +6,6 @@ namespace App\Contracts;
 
 use Filterable\Interfaces\Filter as FilterInterface;
 
-interface ProductFilterInterface extends FilterInterface {}
+interface ProductFilterInterface extends FilterInterface
+{
+}

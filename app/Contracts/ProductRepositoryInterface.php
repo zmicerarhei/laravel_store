@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
+use App\Models\Service;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -85,4 +86,12 @@ interface ProductRepositoryInterface
      * @return void
      */
     public function syncProductToServices(Product $product, array $services): void;
+
+    /**
+     * Retrieves the services for a given product ID.
+     *
+     * @param int $id The ID of the product.
+     * @return Collection<int, Service>
+     */
+    public function getServicesByProductId(int $id): ?Collection;
 }

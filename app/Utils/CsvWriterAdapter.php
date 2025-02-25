@@ -11,9 +11,6 @@ class CsvWriterAdapter implements CsvWriterInterface
 {
     private Writer $writer;
 
-    /**
-     * Создаём адаптер, например, из строки.
-     */
     public function __construct(string $content = '')
     {
         $this->writer = Writer::createFromString($content);

@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Contracts\CategoryRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
-use App\Contracts\ProductRepositoryInterface;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -16,7 +15,6 @@ class CatalogController extends Controller
     public function __construct(
         private ClientProductServiceInterface $clientProductService,
         private CategoryRepositoryInterface $categoryRepository,
-        private ProductRepositoryInterface $productRepository
     ) {
         //
     }
