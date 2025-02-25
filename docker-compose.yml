@@ -22,6 +22,9 @@ services:
         volumes:
             - ./:/var/www
             - composer_cache:/var/www/.composer
+        depends_on:
+            - mysql
+            - rabbitmq
         networks:
             - innowise_network
 

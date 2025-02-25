@@ -14,25 +14,25 @@ class CatalogController extends Controller
 {
     public function __construct(
         private ClientProductServiceInterface $clientProductService,
-        private CategoryRepositoryInterface $categoryRepository
+        private CategoryRepositoryInterface $categoryRepository,
     ) {
         //
     }
 
-    public function index(Request $request, ?string $category_slug = null): View|string
+    public function index(Request $request, ?string $categorySlug = null): View|string
     {
-        $products  = $this->clientProductService->getPaginatedProducts(
-            Product::ITEMS_PER_PAGE,
+        $products = $this->clientProductService->getPaginatedProducts(
+            $categorySlug,
             $request->input('orderBy'),
-            $category_slug,
             Product::DEFAULT_RELATIONS,
+            Product::ITEMS_PER_PAGE
         );
 
         if ($request->ajax()) {
             return $this->clientProductService->generateAjaxResponse($products);
         }
 
-        $category = $this->categoryRepository->getCategoryBySlug($category_slug);
+        $category = $this->categoryRepository->getCategoryBySlug($categorySlug);
 
         return view('catalog.index', compact('products', 'category'));
     }
