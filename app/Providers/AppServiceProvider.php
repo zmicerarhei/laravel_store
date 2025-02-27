@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Cache\Repository as CacheInterface;
+use Illuminate\Contracts\Auth\StatefulGuard as GuardInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -63,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
                 config('currency.default.sale_rate')
             );
         });
-        $this->app->bind(StatefulGuard::class, function ($app) {
+        $this->app->bind(GuardInterface::class, function ($app) {
             return Auth::guard('web');
         });
 
@@ -77,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
             return new DabrabytCurrencyService(
                 $app->make(ExchangeRatesServiceInterface::class),
                 $app->make(CurrencyRepositoryInterface::class),
+                $app->make(CacheInterface::class),
                 config('currency.currencies'),
                 config('currency.fallbackRates'),
             );

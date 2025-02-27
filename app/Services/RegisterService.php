@@ -10,22 +10,23 @@ use App\Contracts\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcherInterface;
+use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerInterface;
+use Illuminate\Contracts\Auth\StatefulGuard as GuardInterface;
 
 class RegisterService implements RegisterServiceInterface
 {
     public function __construct(
-        private PasswordBroker $passwordBroker,
-        private StatefulGuard $guard,
-        private UserRepositoryInterface $userRepository
-    ) {
-    }
+        private PasswordBrokerInterface $passwordBroker,
+        private GuardInterface $guard,
+        private EventDispatcherInterface $eventDispatcher,
+        private UserRepositoryInterface $userRepository,
+    ) {}
 
     public function signUp(array $data): void
     {
         $user = $this->userRepository->create($data);
-        event(new Registered($user));
+        $this->eventDispatcher->dispatch(new Registered($user));
         $this->guard->login($user);
     }
 
@@ -54,7 +55,7 @@ class RegisterService implements RegisterServiceInterface
             'password' => bcrypt($password),
         ])->setRememberToken(str()->random(60));
         $user->save();
-        event(new PasswordReset($user));
+        $this->eventDispatcher->dispatch(new PasswordReset($user));
     }
 
     public function sendResetLink(string $email): string
@@ -66,7 +67,7 @@ class RegisterService implements RegisterServiceInterface
     {
         return $this->passwordBroker->reset(
             $credentials,
-            fn (User $user, string $password) => $this->updateUserPassword($user, $password)
+            fn(User $user, string $password) => $this->updateUserPassword($user, $password)
         );
     }
 

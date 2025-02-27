@@ -42,7 +42,7 @@ class GetAndProcessReport implements ShouldQueue
             $this->user->notify(new ReportSavedNotification($fileName));
             $logger->info("File $fileName was successfully saved by $userName");
         } catch (\Exception $e) {
-            logger()->error("Failed to save file: " . $e->getMessage());
+            $logger->error("Failed to save file: " . $e->getMessage());
         }
     }
 }

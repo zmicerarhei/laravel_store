@@ -7,21 +7,22 @@ namespace App\Services;
 use App\Contracts\CurrencyServiceInterface;
 use App\Contracts\CurrencyRepositoryInterface;
 use App\Contracts\ExchangeRatesServiceInterface;
+use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class DabrabytCurrencyService implements CurrencyServiceInterface
 {
     /**
      * @param array<int, array{iso: string, sale: string}> $fallbackRates
-     * @param array<string> $currency_types
+     * @param array<string> $currencyTypes
      */
     public function __construct(
         private ExchangeRatesServiceInterface $exchangeRatesService,
         private CurrencyRepositoryInterface $currencyRepository,
-        private array $currency_types,
+        private CacheInterface $cache,
+        private array $currencyTypes,
         private array $fallbackRates,
-    ) {
-    }
+    ) {}
 
     public function updateExchangeRates(): void
     {
@@ -34,7 +35,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         foreach ($data['rates'] as $rate) {
             $iso = (string)$rate['iso'];
 
-            if (in_array($iso, $this->currency_types, true)) {
+            if (in_array($iso, $this->currencyTypes, true)) {
                 $this->currencyRepository->updateByIso($rate, $iso);
             }
         }
@@ -42,7 +43,7 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
 
     public function getCurrencies(): Collection
     {
-        return cache()->remember('currencies', 600, function () {
+        return $this->cache->remember('currencies', 600, function () {
             $this->updateExchangeRates();
             return $this->currencyRepository->all();
         });
