@@ -21,7 +21,8 @@ class RegisterService implements RegisterServiceInterface
         private GuardInterface $guard,
         private EventDispatcherInterface $eventDispatcher,
         private UserRepositoryInterface $userRepository,
-    ) {}
+    ) {
+    }
 
     public function signUp(array $data): void
     {
@@ -67,7 +68,7 @@ class RegisterService implements RegisterServiceInterface
     {
         return $this->passwordBroker->reset(
             $credentials,
-            fn(User $user, string $password) => $this->updateUserPassword($user, $password)
+            fn (User $user, string $password) => $this->updateUserPassword($user, $password)
         );
     }
 

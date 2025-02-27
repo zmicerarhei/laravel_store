@@ -9,6 +9,11 @@ use Illuminate\Console\Command;
 
 class UpdateExchangeRates extends Command
 {
+    public function __construct(public CurrencyServiceInterface $currencyService)
+    {
+        parent::__construct();
+    }
+
     /**
      * The name and signature of the console command.
      *
@@ -26,9 +31,9 @@ class UpdateExchangeRates extends Command
     /**
      * Execute the console command.
      */
-    public function handle(CurrencyServiceInterface $currencyService): void
+    public function handle(): void
     {
-        $currencyService->updateExchangeRates();
+        $this->currencyService->updateExchangeRates();
         $this->info('Exchange rates updated successfully!');
     }
 }

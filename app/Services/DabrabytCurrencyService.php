@@ -22,7 +22,8 @@ class DabrabytCurrencyService implements CurrencyServiceInterface
         private CacheInterface $cache,
         private array $currencyTypes,
         private array $fallbackRates,
-    ) {}
+    ) {
+    }
 
     public function updateExchangeRates(): void
     {

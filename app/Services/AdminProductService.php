@@ -22,7 +22,6 @@ class AdminProductService implements AdminProductServiceInterface
         private CategoryRepository $categoryRepository,
         private BrandRepositoryInterface $brandRepository,
         private ServiceRepository $serviceRepository,
-        private ProductFilterInterface $productFilter,
     ) {
     }
     public function getAllProducts(): LengthAwarePaginator
@@ -32,7 +31,6 @@ class AdminProductService implements AdminProductServiceInterface
             null,
             Product::DEFAULT_RELATIONS,
             Product::ITEMS_PER_PAGE,
-            $this->productFilter
         );
     }
     public function getDataForCreateView(): array

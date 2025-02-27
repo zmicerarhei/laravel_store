@@ -23,6 +23,7 @@ use App\Contracts\UserRepositoryInterface;
 use App\Clients\BankApiClient;
 use App\Contracts\BrandRepositoryInterface;
 use App\Contracts\CsvWriterInterface;
+use App\Contracts\HttpClientInterface;
 use App\Filters\ProductFilter;
 use App\Services\AdminProductService;
 use App\Services\DabrabytCurrencyService;
@@ -37,7 +38,9 @@ use App\Http\Middleware\SetDefaultDataToSession;
 use App\Services\ExchangeRatesService;
 use App\Utils\CarbonClock;
 use App\Utils\CsvWriterAdapter;
+use App\Utils\LaravelHttpClient;
 use Psr\Clock\ClockInterface;
+use Illuminate\Http\Client\Factory as HttpClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -68,9 +71,13 @@ class AppServiceProvider extends ServiceProvider
             return Auth::guard('web');
         });
 
+        $this->app->bind(HttpClientInterface::class, function ($app) {
+            return new LaravelHttpClient(new HttpClient());
+        });
+
         $this->app->singleton(BankApiClientInterface::class, function () {
 
-            return new BankApiClient(config('currency.api_url'));
+            return new BankApiClient(config('currency.api_url'), $this->app->make(HttpClientInterface::class));
         });
 
         $this->app->singleton(DabrabytCurrencyService::class, function ($app) {

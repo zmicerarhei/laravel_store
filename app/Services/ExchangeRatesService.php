@@ -13,7 +13,8 @@ class ExchangeRatesService implements ExchangeRatesServiceInterface
     public function __construct(
         private BankApiClientInterface $bankApiClient,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     /**
      * Get exchange rates from API.
