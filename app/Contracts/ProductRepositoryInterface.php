@@ -25,7 +25,6 @@ interface ProductRepositoryInterface
         ?string $orderBy,
         array $relations,
         int $perPage,
-        ProductFilterInterface $productFilter,
     ): LengthAwarePaginator;
 
     /**

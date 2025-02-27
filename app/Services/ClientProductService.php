@@ -7,13 +7,11 @@ namespace App\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Contracts\ProductRepositoryInterface;
 use App\Contracts\ClientProductServiceInterface;
-use App\Contracts\ProductFilterInterface;
 
 class ClientProductService implements ClientProductServiceInterface
 {
     public function __construct(
         private ProductRepositoryInterface $productRepository,
-        private ProductFilterInterface $productFilter,
     ) {
     }
 
@@ -29,7 +27,6 @@ class ClientProductService implements ClientProductServiceInterface
             $orderBy,
             $relations,
             $perPage,
-            $this->productFilter,
         );
     }
 

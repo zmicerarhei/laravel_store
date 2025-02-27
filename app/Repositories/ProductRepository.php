@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function __construct()
-    {
+    public function __construct(
+        private ProductFilterInterface $productFilter
+    ) {
     }
 
     /**
@@ -26,7 +27,6 @@ class ProductRepository implements ProductRepositoryInterface
         ?string $orderBy,
         array $relations,
         int $perPage,
-        ProductFilterInterface $productFilter
     ): LengthAwarePaginator {
         $query = Product::query();
 
@@ -36,7 +36,7 @@ class ProductRepository implements ProductRepositoryInterface
             });
         }
 
-        $query->filter($productFilter);
+        $query->filter($this->productFilter);
 
         $orderByConfig = match ($orderBy) {
             'price-low-high' => ['price', 'asc'],

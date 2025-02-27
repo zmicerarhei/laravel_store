@@ -6,11 +6,14 @@ namespace App\Services;
 
 use App\Contracts\BankApiClientInterface;
 use App\Contracts\ExchangeRatesServiceInterface;
+use Psr\Log\LoggerInterface;
 
 class ExchangeRatesService implements ExchangeRatesServiceInterface
 {
-    public function __construct(protected BankApiClientInterface $bankApiClient)
-    {
+    public function __construct(
+        private BankApiClientInterface $bankApiClient,
+        private LoggerInterface $logger
+    ) {
     }
 
     /**
@@ -34,7 +37,7 @@ class ExchangeRatesService implements ExchangeRatesServiceInterface
                 'rates' => $ratesArr,
             ];
         } catch (\Exception $e) {
-            logger()->error('API request failed: ' . $e->getMessage());
+            $this->logger->error('API request failed: ' . $e->getMessage());
             throw $e;
         }
     }

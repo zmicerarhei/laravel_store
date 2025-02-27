@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Cache\Repository as CacheInterface;
+use Illuminate\Contracts\Auth\StatefulGuard as GuardInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -22,6 +23,7 @@ use App\Contracts\UserRepositoryInterface;
 use App\Clients\BankApiClient;
 use App\Contracts\BrandRepositoryInterface;
 use App\Contracts\CsvWriterInterface;
+use App\Contracts\HttpClientInterface;
 use App\Filters\ProductFilter;
 use App\Services\AdminProductService;
 use App\Services\DabrabytCurrencyService;
@@ -36,7 +38,9 @@ use App\Http\Middleware\SetDefaultDataToSession;
 use App\Services\ExchangeRatesService;
 use App\Utils\CarbonClock;
 use App\Utils\CsvWriterAdapter;
+use App\Utils\LaravelHttpClient;
 use Psr\Clock\ClockInterface;
+use Illuminate\Http\Client\Factory as HttpClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,13 +67,17 @@ class AppServiceProvider extends ServiceProvider
                 config('currency.default.sale_rate')
             );
         });
-        $this->app->bind(StatefulGuard::class, function ($app) {
+        $this->app->bind(GuardInterface::class, function ($app) {
             return Auth::guard('web');
+        });
+
+        $this->app->bind(HttpClientInterface::class, function ($app) {
+            return new LaravelHttpClient(new HttpClient());
         });
 
         $this->app->singleton(BankApiClientInterface::class, function () {
 
-            return new BankApiClient(config('currency.api_url'));
+            return new BankApiClient(config('currency.api_url'), $this->app->make(HttpClientInterface::class));
         });
 
         $this->app->singleton(DabrabytCurrencyService::class, function ($app) {
@@ -77,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
             return new DabrabytCurrencyService(
                 $app->make(ExchangeRatesServiceInterface::class),
                 $app->make(CurrencyRepositoryInterface::class),
+                $app->make(CacheInterface::class),
                 config('currency.currencies'),
                 config('currency.fallbackRates'),
             );
