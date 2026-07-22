@@ -2,8 +2,6 @@
 
 Simple products catalog with client and admin functionality
 
-_The project was developed as part of an internship at the Innowise_.
-
 # Techs
 
 -   PHP 8.3
